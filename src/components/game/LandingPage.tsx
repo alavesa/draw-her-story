@@ -132,7 +132,7 @@ export default function LandingPage() {
 
       <footer className="relative z-10 mt-8 text-center">
         <p className="text-xs text-muted-foreground/60 font-body">
-          Built by Piia with{" "}
+          Built by <a href="https://www.neversay.no/" target="_blank" rel="noopener noreferrer" className="underline hover:text-muted-foreground transition-colors">Piia</a> with{" "}
           <a href="https://lovable.dev" target="_blank" rel="noopener noreferrer" className="underline hover:text-muted-foreground transition-colors">Lovable</a>
           {" "}&{" "}
           <a href="https://claude.ai" target="_blank" rel="noopener noreferrer" className="underline hover:text-muted-foreground transition-colors">Claude</a>
