@@ -4,8 +4,8 @@ A same-device drawing and guessing game celebrating the women who changed the wo
 
 ## How It Works
 
-1. Two players or teams enter their names
-2. Each round, one player draws a word related to a famous woman while the other guesses
+1. 2–3 players or teams enter their names
+2. Each round, one player draws a word related to a famous woman while the others guess
 3. After each round, a "Did You Know?" card reveals the woman behind the word
 4. At the end, see your scores and all the women you discovered
 
@@ -31,6 +31,6 @@ npm run dev
 
 - React + TypeScript
 - Vite
-- Tailwind CSS + shadcn/ui
+- Tailwind CSS
 - Framer Motion
 - Lucide Icons
