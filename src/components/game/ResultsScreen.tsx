@@ -11,11 +11,15 @@ export default function ResultsScreen() {
   const { state, dispatch } = useGame();
   const sorted = [...state.players].sort((a, b) => b.score - a.score);
 
-  const handleShare = () => {
+  const handleShare = async () => {
     const womenNames = state.usedWords.map(w => w.woman).join(", ");
     const text = `I played Draw Her Story for #IWD and scored ${sorted[0]?.score || 0} points! 🎨🟣 We celebrated ${womenNames}!`;
-    navigator.clipboard.writeText(text);
-    toast.success("Copied to clipboard!");
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success("Copied to clipboard!");
+    } catch {
+      toast.error("Could not copy to clipboard");
+    }
   };
 
   return (
