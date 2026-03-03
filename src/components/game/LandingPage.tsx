@@ -129,6 +129,17 @@ export default function LandingPage() {
           </button>
         </div>
       </motion.div>
+
+      <footer className="relative z-10 mt-8 text-center">
+        <p className="text-xs text-muted-foreground/60 font-body">
+          Built by Piia with{" "}
+          <a href="https://lovable.dev" target="_blank" rel="noopener noreferrer" className="underline hover:text-muted-foreground transition-colors">Lovable</a>
+          {" "}&{" "}
+          <a href="https://claude.ai" target="_blank" rel="noopener noreferrer" className="underline hover:text-muted-foreground transition-colors">Claude</a>
+          {" · "}
+          <a href="https://github.com/alavesa/draw-her-story" target="_blank" rel="noopener noreferrer" className="underline hover:text-muted-foreground transition-colors">Source</a>
+        </p>
+      </footer>
     </div>
   );
 }
