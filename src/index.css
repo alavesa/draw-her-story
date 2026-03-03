@@ -34,10 +34,10 @@
     --input: 270 20% 90%;
     --ring: 263 70% 58%;
 
-    --radius: 0.75rem;
+    --radius: 0;
 
     --gradient-primary: linear-gradient(135deg, hsl(263 70% 58%), hsl(280 60% 45%));
-    --gradient-gold: linear-gradient(135deg, hsl(38 92% 50%), hsl(45 93% 60%));
+    --gradient-pink: linear-gradient(135deg, hsl(330 80% 55%), hsl(340 90% 65%));
     --gradient-reveal: linear-gradient(135deg, hsl(270 60% 30%), hsl(263 70% 50%), hsl(280 50% 40%));
     --shadow-card: 0 4px 20px -4px hsl(263 70% 58% / 0.15);
     --shadow-elevated: 0 8px 40px -8px hsl(263 70% 58% / 0.25);
@@ -68,7 +68,7 @@
     --secondary-foreground: 0 0% 95%;
     --muted: 270 15% 18%;
     --muted-foreground: 270 10% 60%;
-    --accent: 38 92% 50%;
+    --accent: 330 80% 55%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 62% 30%;
     --destructive-foreground: 0 0% 95%;
@@ -103,8 +103,8 @@
   .gradient-primary {
     background: var(--gradient-primary);
   }
-  .gradient-gold {
-    background: var(--gradient-gold);
+  .gradient-pink {
+    background: var(--gradient-pink);
   }
   .gradient-reveal {
     background: var(--gradient-reveal);

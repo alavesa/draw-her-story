@@ -30,26 +30,27 @@ export default function ChatPanel() {
   const isArtist = false; // In local play, the guess panel is always for guessers
 
   return (
-    <div className="flex flex-col h-full rounded-lg border border-border bg-card shadow-card overflow-hidden">
-      <div className="px-4 py-3 gradient-primary">
+    <div className="flex flex-col h-full border border-border bg-card shadow-card overflow-hidden">
+      <div className="px-3 py-2 sm:px-4 sm:py-3 gradient-primary">
         <h3 className="font-display font-semibold text-primary-foreground text-sm">Guesses</h3>
       </div>
-      <div ref={scrollRef} className="flex-1 overflow-y-auto p-3 space-y-2 min-h-0" style={{ maxHeight: "300px" }}>
+      <div ref={scrollRef} role="log" aria-live="polite" aria-label="Game guesses" className="flex-1 overflow-y-auto p-2 sm:p-3 space-y-2 min-h-0" style={{ maxHeight: "clamp(150px, 30vh, 300px)" }}>
         {state.messages.map((msg) => (
           <MessageBubble key={msg.id} message={msg} />
         ))}
       </div>
       {state.phase === "drawing" && (
-        <form onSubmit={handleSubmit} className="p-3 border-t border-border flex gap-2">
+        <form onSubmit={handleSubmit} aria-label="Submit a guess" className="p-2 sm:p-3 border-t border-border flex gap-2">
           <input
             type="text"
             value={input}
             onChange={e => setInput(e.target.value)}
+            aria-label="Type your guess"
             placeholder="Type your guess..."
-            className="flex-1 px-3 py-2 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+            className="flex-1 px-3 py-2 border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring"
           />
-          <button type="submit" className="w-9 h-9 rounded-lg gradient-primary flex items-center justify-center text-primary-foreground hover:opacity-90 transition-opacity">
-            <Send size={16} />
+          <button type="submit" aria-label="Send guess" className="w-9 h-9 gradient-primary flex items-center justify-center text-primary-foreground hover:opacity-90 transition-opacity">
+            <Send size={16} aria-hidden="true" />
           </button>
         </form>
       )}
@@ -63,7 +64,7 @@ function MessageBubble({ message }: { message: ChatMessage }) {
   }
   if (message.type === "correct") {
     return (
-      <div className="flex items-center gap-2 rounded-lg px-3 py-2 bg-accent/10 border border-accent/30">
+      <div className="flex items-center gap-2 px-3 py-2 bg-accent/10 border border-accent/30">
         <Check size={14} className="text-accent shrink-0" />
         <span className="text-sm font-medium text-foreground">{message.playerName} guessed correctly!</span>
       </div>
@@ -71,13 +72,13 @@ function MessageBubble({ message }: { message: ChatMessage }) {
   }
   if (message.type === "close") {
     return (
-      <div className="rounded-lg px-3 py-2 bg-destructive/10 border border-destructive/20">
+      <div className="px-3 py-2 bg-destructive/10 border border-destructive/20">
         <span className="text-sm text-foreground"><strong>{message.playerName}:</strong> {message.text}</span>
       </div>
     );
   }
   return (
-    <div className="rounded-lg px-3 py-2 bg-secondary">
+    <div className="px-3 py-2 bg-secondary">
       <span className="text-sm"><strong className="text-primary">{message.playerName}:</strong> {message.text}</span>
     </div>
   );

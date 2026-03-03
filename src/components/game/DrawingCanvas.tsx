@@ -2,6 +2,8 @@ import React, { useRef, useState, useCallback, useEffect, forwardRef, useImperat
 import { Eraser, Undo2, Trash2 } from "lucide-react";
 
 const COLORS = ["#1a1a2e", "#7C3AED", "#F59E0B", "#EF4444", "#3B82F6"];
+const COLOR_NAMES = ["Black", "Purple", "Yellow", "Red", "Blue"];
+const SIZE_NAMES = ["Small", "Medium", "Large"];
 const SIZES = [3, 8, 16];
 
 export interface DrawingCanvasHandle {
@@ -134,9 +136,11 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle, Props>(({ disabled = false
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="rounded-lg border-2 border-border overflow-hidden shadow-card bg-card">
+      <div className="border-2 border-border overflow-hidden shadow-card bg-card">
         <canvas
           ref={canvasRef}
+          role="img"
+          aria-label="Drawing canvas area"
           className={`w-full touch-none ${disabled ? "opacity-60 cursor-not-allowed" : "cursor-crosshair"}`}
           style={{ height: "clamp(280px, 40vh, 500px)" }}
           onMouseDown={startDraw}
@@ -149,24 +153,26 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle, Props>(({ disabled = false
         />
       </div>
       {!disabled && (
-        <div className="flex flex-wrap items-center gap-3 justify-center">
-          <div className="flex gap-1.5">
-            {COLORS.map(c => (
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 justify-center">
+          <div className="flex gap-1 sm:gap-1.5">
+            {COLORS.map((c, i) => (
               <button
                 key={c}
                 onClick={() => { setColor(c); setIsEraser(false); }}
-                className={`w-8 h-8 rounded-full border-2 transition-transform ${color === c && !isEraser ? "scale-125 border-foreground" : "border-transparent hover:scale-110"}`}
+                aria-label={`${COLOR_NAMES[i]} color${color === c && !isEraser ? " (selected)" : ""}`}
+                className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 transition-transform ${color === c && !isEraser ? "scale-125 border-foreground" : "border-transparent hover:scale-110"}`}
                 style={{ backgroundColor: c }}
               />
             ))}
           </div>
-          <div className="w-px h-6 bg-border" />
-          <div className="flex gap-1.5">
+          <div className="w-px h-5 sm:h-6 bg-border" />
+          <div className="flex gap-1 sm:gap-1.5">
             {SIZES.map((s, i) => (
               <button
                 key={s}
                 onClick={() => setSize(s)}
-                className={`w-8 h-8 rounded-lg border flex items-center justify-center transition-all ${size === s ? "bg-primary border-primary" : "bg-card border-border hover:bg-secondary"}`}
+                aria-label={`${SIZE_NAMES[i]} brush${size === s ? " (selected)" : ""}`}
+                className={`w-7 h-7 sm:w-8 sm:h-8 border flex items-center justify-center transition-all ${size === s ? "bg-primary border-primary" : "bg-card border-border hover:bg-secondary"}`}
               >
                 <div
                   className="rounded-full"
@@ -175,18 +181,20 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle, Props>(({ disabled = false
               </button>
             ))}
           </div>
-          <div className="w-px h-6 bg-border" />
+          <div className="w-px h-5 sm:h-6 bg-border" />
           <button
             onClick={() => setIsEraser(!isEraser)}
-            className={`w-8 h-8 rounded-lg border flex items-center justify-center transition-all ${isEraser ? "bg-primary border-primary text-primary-foreground" : "bg-card border-border hover:bg-secondary"}`}
+            aria-label={isEraser ? "Eraser (active)" : "Eraser"}
+            aria-pressed={isEraser}
+            className={`w-7 h-7 sm:w-8 sm:h-8 border flex items-center justify-center transition-all ${isEraser ? "bg-primary border-primary text-primary-foreground" : "bg-card border-border hover:bg-secondary"}`}
           >
-            <Eraser size={16} />
+            <Eraser size={16} aria-hidden="true" />
           </button>
-          <button onClick={undo} className="w-8 h-8 rounded-lg border border-border bg-card hover:bg-secondary flex items-center justify-center">
-            <Undo2 size={16} />
+          <button onClick={undo} aria-label="Undo" className="w-7 h-7 sm:w-8 sm:h-8 border border-border bg-card hover:bg-secondary flex items-center justify-center">
+            <Undo2 size={16} aria-hidden="true" />
           </button>
-          <button onClick={clearCanvas} className="w-8 h-8 rounded-lg border border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground flex items-center justify-center transition-all">
-            <Trash2 size={16} />
+          <button onClick={clearCanvas} aria-label="Clear canvas" className="w-7 h-7 sm:w-8 sm:h-8 border border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground flex items-center justify-center transition-all">
+            <Trash2 size={16} aria-hidden="true" />
           </button>
         </div>
       )}
