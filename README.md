@@ -1,6 +1,6 @@
 # Draw Her Story
 
-A same-device drawing and guessing game celebrating the women who changed the world. Built for International Women's Day as part of the [She Builds](https://shebuilds.lovable.app/) hackathon.
+A same-device drawing and guessing game celebrating the women who changed the world. Built for International Women's Day as part of the [She Builds](https://shebuilds.lovable.app/) hackathon. :)
 
 ## How It Works
 
