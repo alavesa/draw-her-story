@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useGame } from "@/context/GameContext";
 import { motion } from "framer-motion";
 import { Palette, Users, Sparkles } from "lucide-react";
+import heroWomen from "@/assets/hero-women.png";
 
 export default function LandingPage() {
   const { dispatch } = useGame();
@@ -14,15 +15,25 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-background relative overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-background relative overflow-hidden">
       {/* Decorative blobs */}
       <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full opacity-10 gradient-primary blur-3xl" />
       <div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] rounded-full opacity-10 gradient-gold blur-3xl" />
 
+      {/* Hero Women Image */}
+      <motion.img
+        src={heroWomen}
+        alt="Diverse women celebrating together with paintbrushes"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="relative z-10 w-full max-w-lg mb-[-2rem]"
+      />
+
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7 }}
+        transition={{ duration: 0.7, delay: 0.2 }}
         className="relative z-10 text-center max-w-md w-full"
       >
         {/* IWD Badge */}
