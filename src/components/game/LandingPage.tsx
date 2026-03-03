@@ -1,19 +1,35 @@
 import { useState } from "react";
 import { useGame } from "@/context/GameContext";
 import { motion } from "framer-motion";
-import { Play, Sparkles } from "lucide-react";
+import { Play, Sparkles, UserPlus, X } from "lucide-react";
 import heroWomen from "@/assets/hero-women.png";
 
 export default function LandingPage() {
   const { dispatch } = useGame();
-  const [name1, setName1] = useState("");
-  const [name2, setName2] = useState("");
-  const canPlay = name1.trim() && name2.trim() && name1.trim() !== name2.trim();
+  const [names, setNames] = useState(["", ""]);
+
+  const trimmed = names.map(n => n.trim()).filter(Boolean);
+  const allUnique = new Set(trimmed).size === trimmed.length;
+  const canPlay = trimmed.length >= 2 && allUnique;
+
+  const updateName = (index: number, value: string) => {
+    setNames(prev => prev.map((n, i) => (i === index ? value : n)));
+  };
+
+  const addPlayer = () => {
+    if (names.length < 3) setNames(prev => [...prev, ""]);
+  };
+
+  const removePlayer = (index: number) => {
+    setNames(prev => prev.filter((_, i) => i !== index));
+  };
 
   const handleStart = () => {
     if (!canPlay) return;
-    dispatch({ type: "CREATE_ROOM", playerName: name1.trim() });
-    dispatch({ type: "JOIN_ROOM", playerName: name2.trim() });
+    dispatch({ type: "CREATE_ROOM", playerName: trimmed[0] });
+    for (let i = 1; i < trimmed.length; i++) {
+      dispatch({ type: "JOIN_ROOM", playerName: trimmed[i] });
+    }
     dispatch({ type: "START_GAME" });
   };
 
@@ -59,36 +75,49 @@ export default function LandingPage() {
           Sketch, Guess, and Celebrate the Women Who Changed the World
         </p>
         <div className="inline-flex flex-wrap items-center justify-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 bg-card/80 border border-border backdrop-blur-sm mb-8">
-          <span className="font-body font-semibold text-foreground text-xs sm:text-sm">2 players or teams</span>
+          <span className="font-body font-semibold text-foreground text-xs sm:text-sm">2–3 players or teams</span>
           <span className="text-border hidden sm:inline">|</span>
-          <span className="text-muted-foreground font-body text-xs sm:text-sm">1 device · 1 round each · One draws, one guesses</span>
+          <span className="text-muted-foreground font-body text-xs sm:text-sm">1 device · 1 round each · One draws, others guess</span>
         </div>
 
         <div className="space-y-3">
-          <div>
-            <label htmlFor="player1-name" className="block text-xs font-body font-semibold text-foreground/60 uppercase tracking-wider mb-1">Player / Team 1</label>
-            <input
-              id="player1-name"
-              type="text"
-              placeholder="Enter name"
-              value={name1}
-              onChange={e => setName1(e.target.value)}
-              maxLength={16}
-              className="w-full px-5 py-3 border border-input bg-card text-foreground font-body text-center text-lg focus:outline-none focus:ring-2 focus:ring-ring shadow-card"
-            />
-          </div>
-          <div>
-            <label htmlFor="player2-name" className="block text-xs font-body font-semibold text-foreground/60 uppercase tracking-wider mb-1">Player / Team 2</label>
-            <input
-              id="player2-name"
-              type="text"
-              placeholder="Enter name"
-              value={name2}
-              onChange={e => setName2(e.target.value)}
-              maxLength={16}
-              className="w-full px-5 py-3 border border-input bg-card text-foreground font-body text-center text-lg focus:outline-none focus:ring-2 focus:ring-ring shadow-card"
-            />
-          </div>
+          {names.map((name, i) => (
+            <div key={i}>
+              <label htmlFor={`player${i + 1}-name`} className="block text-xs font-body font-semibold text-foreground/60 uppercase tracking-wider mb-1">
+                Player / Team {i + 1}
+              </label>
+              <div className="flex gap-2">
+                <input
+                  id={`player${i + 1}-name`}
+                  type="text"
+                  placeholder="Enter name"
+                  value={name}
+                  onChange={e => updateName(i, e.target.value)}
+                  maxLength={16}
+                  className="flex-1 px-5 py-3 border border-input bg-card text-foreground font-body text-center text-lg focus:outline-none focus:ring-2 focus:ring-ring shadow-card"
+                />
+                {i >= 2 && (
+                  <button
+                    onClick={() => removePlayer(i)}
+                    aria-label={`Remove player ${i + 1}`}
+                    className="w-12 border border-input bg-card text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors flex items-center justify-center"
+                  >
+                    <X size={18} />
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
+
+          {names.length < 3 && (
+            <button
+              onClick={addPlayer}
+              className="w-full py-2.5 border border-dashed border-input bg-card/50 text-muted-foreground font-body text-sm hover:text-foreground hover:border-foreground/30 transition-colors flex items-center justify-center gap-2"
+            >
+              <UserPlus size={16} />
+              Add Player / Team
+            </button>
+          )}
 
           <button
             onClick={handleStart}

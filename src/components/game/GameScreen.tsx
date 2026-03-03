@@ -11,7 +11,7 @@ export default function GameScreen() {
   const { state, dispatch } = useGame();
   const canvasRef = useRef(null);
   const artist = state.players[state.currentArtistIndex];
-  const guesser = state.players.find((_, i) => i !== state.currentArtistIndex);
+  const guessers = state.players.filter((_, i) => i !== state.currentArtistIndex);
 
   // Step 1: Pass device to artist screen
   if (state.drawingSubPhase === "pass-to-artist") {
@@ -41,7 +41,7 @@ export default function GameScreen() {
             It's your turn to draw!
           </p>
           <p className="text-sm text-muted-foreground font-body mb-8">
-            Make sure {guesser?.name} isn't looking at the screen.
+            Make sure {guessers.map(g => g.name).join(" and ")} {guessers.length === 1 ? "isn't" : "aren't"} looking at the screen.
           </p>
           <button
             onClick={() => dispatch({ type: "ARTIST_PEEK" })}

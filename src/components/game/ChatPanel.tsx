@@ -6,7 +6,7 @@ export default function ChatPanel() {
   const { state, dispatch } = useGame();
   const [input, setInput] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
-  const currentPlayerId = state.players[state.currentArtistIndex]?.id === "p1" ? "p2" : "p1"; // For local play, guesser is always non-artist
+  const nonArtistPlayers = state.players.filter((_, i) => i !== state.currentArtistIndex);
 
   useEffect(() => {
     if (scrollRef.current) {
