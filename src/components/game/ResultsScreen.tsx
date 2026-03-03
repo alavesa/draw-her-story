@@ -2,10 +2,7 @@ import { useGame } from "@/context/GameContext";
 import { motion } from "framer-motion";
 import { Trophy, Share2, RotateCcw, Sparkles } from "lucide-react";
 import { toast } from "sonner";
-
-const categoryEmojis: Record<string, string> = {
-  Science: "🔬", Arts: "🎨", Sports: "🏆", Activism: "✊", Politics: "⚖️", Literature: "📚", Exploration: "🚀",
-};
+import { categoryEmojis } from "@/data/categoryEmojis";
 
 function getRank(sorted: { score: number }[], index: number): number {
   if (index === 0) return 1;

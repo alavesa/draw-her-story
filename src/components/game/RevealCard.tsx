@@ -1,16 +1,7 @@
 import { useGame } from "@/context/GameContext";
 import { motion } from "framer-motion";
 import { Sparkles, ArrowRight } from "lucide-react";
-
-const categoryEmojis: Record<string, string> = {
-  Science: "🔬",
-  Arts: "🎨",
-  Sports: "🏆",
-  Activism: "✊",
-  Politics: "⚖️",
-  Literature: "📚",
-  Exploration: "🚀",
-};
+import { categoryEmojis } from "@/data/categoryEmojis";
 
 export default function RevealCard() {
   const { state, dispatch } = useGame();

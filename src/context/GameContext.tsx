@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useCallback, ReactNode } from "react";
+import React, { createContext, useContext, useReducer, ReactNode } from "react";
 import { wordBank, WordEntry } from "@/data/wordBank";
 
 export interface Player {
@@ -190,7 +190,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       };
 
       let updatedPlayers = state.players;
-      let updatedMessages = [...state.messages, msg];
+      const updatedMessages = [...state.messages, msg];
 
       if (result === "correct") {
         const timeBonus = Math.floor(state.timeRemaining * 2);
