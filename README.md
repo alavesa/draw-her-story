@@ -11,7 +11,7 @@ A same-device drawing and guessing game celebrating the women who changed the wo
 
 ## Features
 
-- 33 notable women across Science, Arts, Sports, Activism, Politics, Literature, and Exploration
+- 54 notable women across Science, Arts, Sports, Activism, Politics, Literature, and Exploration
 - Same-device pass-and-play — no accounts or internet needed
 - Typo-tolerant guessing with letter hints that reveal over time
 - Shareable results to spread the word
