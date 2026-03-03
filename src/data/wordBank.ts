@@ -40,4 +40,39 @@ export const wordBank: WordEntry[] = [
   { word: "protest sign and megaphone", woman: "Gloria Steinem", category: "Activism", bio: "Gloria Steinem co-founded Ms. Magazine and became one of the most visible leaders of the feminist movement in the 1960s and 70s. Her writing and activism transformed the conversation about women's rights." },
   { word: "wheelchair and physics equations", woman: "Mileva Marić", category: "Science", bio: "Mileva Marić was a brilliant Serbian physicist and mathematician who was one of the first women to study physics in Europe. She collaborated closely with Albert Einstein during his most productive years." },
   { word: "ink pen and novel", woman: "Toni Morrison", category: "Literature", bio: "Toni Morrison was the first African American woman to win the Nobel Prize in Literature. Her novels explored the African American experience with extraordinary depth and beauty." },
+
+  // Science
+  { word: "radio frequency waves", woman: "Hedy Lamarr", category: "Science", bio: "Hedy Lamarr co-invented frequency-hopping spread spectrum technology during World War II. Her invention laid the groundwork for modern Wi-Fi, Bluetooth, and GPS." },
+  { word: "rocket trajectory calculations", woman: "Katherine Johnson", category: "Science", bio: "Katherine Johnson's calculations were critical to the success of NASA's early space missions, including John Glenn's orbital flight. Her story was told in the film Hidden Figures." },
+  { word: "abstract algebra equations", woman: "Emmy Noether", category: "Science", bio: "Emmy Noether revolutionized abstract algebra and theoretical physics. Albert Einstein called her the most important woman in the history of mathematics." },
+
+  // Arts
+  { word: "infinity mirror room", woman: "Yayoi Kusama", category: "Arts", bio: "Yayoi Kusama is one of the world's most influential contemporary artists, known for her immersive infinity rooms and polka dot installations. Her work spans painting, sculpture, film, and environmental art." },
+  { word: "caged bird singing", woman: "Maya Angelou", category: "Arts", bio: "Maya Angelou was a poet, memoirist, and civil rights activist whose autobiography 'I Know Why the Caged Bird Sings' became a classic of American literature. She recited her poem at President Clinton's inauguration." },
+  { word: "curved building", woman: "Zaha Hadid", category: "Arts", bio: "Zaha Hadid was the first woman to receive the Pritzker Architecture Prize. Her bold, futuristic designs transformed modern architecture and earned her the nickname 'Queen of the Curve'." },
+
+  // Sports
+  { word: "gymnastics vault", woman: "Simone Biles", category: "Sports", bio: "Simone Biles is the most decorated gymnast in history, with numerous Olympic and World Championship medals. She also championed athlete mental health by prioritizing her wellbeing at the 2020 Olympics." },
+  { word: "tennis battle of the sexes", woman: "Billie Jean King", category: "Sports", bio: "Billie Jean King won the famous 'Battle of the Sexes' tennis match in 1973 and fought tirelessly for equal prize money in sports. She founded the Women's Tennis Association and the Women's Sports Foundation." },
+  { word: "perfect 10 on balance beam", woman: "Nadia Comăneci", category: "Sports", bio: "Nadia Comăneci scored the first perfect 10 in Olympic gymnastics history at the 1976 Montreal Games at age 14. She earned seven perfect scores during those Games and became a global icon." },
+
+  // Activism
+  { word: "planting trees", woman: "Wangari Maathai", category: "Activism", bio: "Wangari Maathai founded the Green Belt Movement, which planted over 51 million trees across Kenya. She was the first African woman to win the Nobel Peace Prize in 2004." },
+  { word: "climate strike sign", woman: "Greta Thunberg", category: "Activism", bio: "Greta Thunberg started a global youth climate movement by protesting outside the Swedish parliament at age 15. Her school strikes inspired millions worldwide to demand action on climate change." },
+  { word: "votes for women banner", woman: "Emmeline Pankhurst", category: "Activism", bio: "Emmeline Pankhurst led the British suffragette movement, fighting for women's right to vote in the early 20th century. Her militant activism was key to women gaining the vote in the UK in 1918." },
+
+  // Politics
+  { word: "parliament podium", woman: "Jacinda Ardern", category: "Politics", bio: "Jacinda Ardern became New Zealand's youngest female Prime Minister and was praised worldwide for her compassionate leadership. She led her country through crises with empathy and decisive action." },
+  { word: "Berlin Wall and handshake", woman: "Angela Merkel", category: "Politics", bio: "Angela Merkel served as Chancellor of Germany for 16 years, becoming one of the most powerful women in the world. She was a key leader in shaping European politics and the global response to multiple crises." },
+  { word: "election victory speech", woman: "Benazir Bhutto", category: "Politics", bio: "Benazir Bhutto was the first woman to lead a Muslim-majority country when she became Prime Minister of Pakistan in 1988. She championed democracy and women's rights throughout her political career." },
+
+  // Literature
+  { word: "lighthouse and waves", woman: "Virginia Woolf", category: "Literature", bio: "Virginia Woolf was a pioneering modernist author whose stream-of-consciousness novels like 'Mrs Dalloway' and 'To the Lighthouse' redefined fiction. Her essay 'A Room of One's Own' became a foundational feminist text." },
+  { word: "monster and lightning", woman: "Mary Shelley", category: "Literature", bio: "Mary Shelley wrote 'Frankenstein' at age 18, creating what is widely considered the first science fiction novel. Her exploration of creation, responsibility, and humanity remains influential over 200 years later." },
+  { word: "TEDx stage and microphone", woman: "Chimamanda Ngozi Adichie", category: "Literature", bio: "Chimamanda Ngozi Adichie is a Nigerian author whose novels and essays on feminism and identity have reached millions worldwide. Her TED talk 'We Should All Be Feminists' became a global rallying cry." },
+
+  // Exploration
+  { word: "space shuttle cockpit", woman: "Sally Ride", category: "Exploration", bio: "Sally Ride became the first American woman in space in 1983 aboard the Space Shuttle Challenger. She later dedicated her career to encouraging young people, especially girls, to pursue science." },
+  { word: "mountain summit flag", woman: "Junko Tabei", category: "Exploration", bio: "Junko Tabei was the first woman to reach the summit of Mount Everest in 1975. She went on to climb the highest peak on every continent, inspiring women mountaineers around the world." },
+  { word: "compass and river map", woman: "Sacagawea", category: "Exploration", bio: "Sacagawea was a Lemhi Shoshone woman who guided the Lewis and Clark Expedition across the American West in 1805. Her knowledge of the land and languages was essential to the expedition's success." },
 ];
