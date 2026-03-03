@@ -1,73 +1,36 @@
-# Welcome to your Lovable project
+# Draw Her Story
 
-## Project info
+A same-device drawing and guessing game celebrating the women who changed the world. Built for International Women's Day.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## How It Works
 
-## How can I edit this code?
+1. Two players or teams enter their names
+2. Each round, one player draws a word related to a famous woman while the other guesses
+3. After each round, a "Did You Know?" card reveals the woman behind the word
+4. At the end, see your scores and all the women you discovered
 
-There are several ways of editing your application.
+## Features
 
-**Use Lovable**
+- 33 notable women across Science, Arts, Sports, Activism, Politics, Literature, and Exploration
+- Same-device pass-and-play — no accounts or internet needed
+- Typo-tolerant guessing with letter hints that reveal over time
+- Shareable results to spread the word
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## Getting Started
 
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+Requires Node.js & npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+git clone https://github.com/alavesa/draw-her-story.git
+cd draw-her-story
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## Tech Stack
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
+- React + TypeScript
 - Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+- Tailwind CSS + shadcn/ui
+- Framer Motion
+- Lucide Icons
