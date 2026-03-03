@@ -6,7 +6,15 @@ export default function ChatPanel() {
   const { state, dispatch } = useGame();
   const [input, setInput] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
-  const nonArtistPlayers = state.players.filter((_, i) => i !== state.currentArtistIndex);
+  const guessers = state.players.filter((_, i) => i !== state.currentArtistIndex);
+  const [activeGuesserId, setActiveGuesserId] = useState(guessers[0]?.id ?? "");
+
+  // Keep activeGuesserId in sync when round changes
+  useEffect(() => {
+    if (guessers.length > 0 && !guessers.find(g => g.id === activeGuesserId)) {
+      setActiveGuesserId(guessers[0].id);
+    }
+  }, [state.currentArtistIndex]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -14,20 +22,14 @@ export default function ChatPanel() {
     }
   }, [state.messages]);
 
+  const activeGuesser = guessers.find(g => g.id === activeGuesserId) || guessers[0];
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim()) return;
-    // In local multiplayer, we cycle through non-artist players
-    const nonArtists = state.players.filter((_, i) => i !== state.currentArtistIndex);
-    // For simplicity in local mode, use the first non-artist who hasn't guessed
-    const guesser = nonArtists.find(p => !p.hasGuessedCorrectly) || nonArtists[0];
-    if (guesser) {
-      dispatch({ type: "SUBMIT_GUESS", playerId: guesser.id, text: input.trim() });
-    }
+    if (!input.trim() || !activeGuesser) return;
+    dispatch({ type: "SUBMIT_GUESS", playerId: activeGuesser.id, text: input.trim() });
     setInput("");
   };
-
-  const isArtist = false; // In local play, the guess panel is always for guessers
 
   return (
     <div className="flex flex-col h-full border border-border bg-card shadow-card overflow-hidden">
@@ -40,7 +42,35 @@ export default function ChatPanel() {
         ))}
       </div>
       {state.phase === "drawing" && (
-        <form onSubmit={handleSubmit} aria-label="Submit a guess" className="p-2 sm:p-3 border-t border-border flex gap-2">
+        <div className="border-t border-border">
+          {guessers.length > 1 && (
+            <div className="flex" role="tablist" aria-label="Select guesser">
+              {guessers.map(g => {
+                const isActive = g.id === activeGuesser?.id;
+                const hasGuessed = g.hasGuessedCorrectly;
+                return (
+                  <button
+                    key={g.id}
+                    role="tab"
+                    aria-selected={isActive}
+                    disabled={hasGuessed}
+                    onClick={() => setActiveGuesserId(g.id)}
+                    className={`flex-1 py-1.5 text-xs font-body font-semibold transition-colors ${
+                      hasGuessed
+                        ? "text-muted-foreground/50 line-through cursor-not-allowed"
+                        : isActive
+                          ? "bg-primary/10 text-primary border-b-2 border-primary"
+                          : "text-muted-foreground hover:text-foreground"
+                    }`}
+                    style={isActive && !hasGuessed ? { color: g.color } : undefined}
+                  >
+                    {g.name}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+          <form onSubmit={handleSubmit} aria-label="Submit a guess" className="p-2 sm:p-3 flex gap-2">
           <input
             type="text"
             value={input}
@@ -52,7 +82,8 @@ export default function ChatPanel() {
           <button type="submit" aria-label="Send guess" className="w-9 h-9 gradient-primary flex items-center justify-center text-primary-foreground hover:opacity-90 transition-opacity">
             <Send size={16} aria-hidden="true" />
           </button>
-        </form>
+          </form>
+        </div>
       )}
     </div>
   );
