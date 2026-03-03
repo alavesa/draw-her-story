@@ -30,6 +30,7 @@ export interface GameState {
   roundIndex: number;
   currentWord: WordEntry | null;
   usedWords: WordEntry[];
+  guessedWords: WordEntry[];
   messages: ChatMessage[];
   timeRemaining: number;
   revealedHints: number;
@@ -72,6 +73,7 @@ const initialState: GameState = {
   roundIndex: 0,
   currentWord: null,
   usedWords: [],
+  guessedWords: [],
   messages: [],
   timeRemaining: 90,
   revealedHints: 0,
@@ -161,6 +163,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         roundIndex: 0,
         currentWord: word,
         usedWords: [word],
+        guessedWords: [],
         messages: [{ id: "sys-start", playerId: "system", playerName: "System", text: `${state.players[0].name} is drawing!`, type: "system", timestamp: Date.now() }],
         timeRemaining: 90,
         revealedHints: 0,
@@ -190,7 +193,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       let updatedMessages = [...state.messages, msg];
 
       if (result === "correct") {
-        const timeBonus = Math.floor(state.timeRemaining * 10);
+        const timeBonus = Math.floor(state.timeRemaining * 2);
         const basePoints = 100;
         updatedPlayers = state.players.map(p => {
           if (p.id === action.playerId) return { ...p, score: p.score + basePoints + timeBonus, hasGuessedCorrectly: true };
@@ -223,6 +226,9 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         players: updatedPlayers,
         messages: updatedMessages,
         phase: allGuessed ? "reveal" : state.phase,
+        guessedWords: allGuessed && state.currentWord
+          ? [...state.guessedWords, state.currentWord]
+          : state.guessedWords,
       };
     }
     case "TICK": {
@@ -238,6 +244,8 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         revealedHints: Math.max(state.revealedHints, expectedHints),
       };
     }
+    case "END_ROUND":
+      return { ...state, timeRemaining: 0, phase: "reveal" };
     case "NEXT_ROUND": {
       const nextArtist = state.currentArtistIndex + 1;
       if (nextArtist >= state.players.length) {
@@ -258,6 +266,8 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         players: state.players.map(p => ({ ...p, hasGuessedCorrectly: false })),
       };
     }
+    case "SHOW_RESULTS":
+      return { ...state, phase: "results" };
     case "RESET":
       return initialState;
     default:
