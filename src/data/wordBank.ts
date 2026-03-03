@@ -1,0 +1,43 @@
+export type Category = "Science" | "Arts" | "Sports" | "Activism" | "Politics" | "Literature" | "Exploration";
+
+export interface WordEntry {
+  word: string;
+  woman: string;
+  category: Category;
+  bio: string;
+}
+
+export const wordBank: WordEntry[] = [
+  { word: "radioactivity", woman: "Marie Curie", category: "Science", bio: "Marie Curie was the first woman to win a Nobel Prize and the only person to win Nobel Prizes in two different sciences. Her pioneering research on radioactivity laid the foundation for modern nuclear physics." },
+  { word: "self-portrait", woman: "Frida Kahlo", category: "Arts", bio: "Frida Kahlo transformed personal pain into powerful art, creating over 50 self-portraits that explored identity and the human experience. She became a feminist icon and one of Mexico's greatest artists." },
+  { word: "flying across the Atlantic", woman: "Amelia Earhart", category: "Exploration", bio: "Amelia Earhart was the first woman to fly solo across the Atlantic Ocean in 1932. Her courage and determination inspired generations of women to pursue careers in aviation." },
+  { word: "computer programming", woman: "Ada Lovelace", category: "Science", bio: "Ada Lovelace wrote the first computer algorithm in the 1840s, long before modern computers existed. She is widely regarded as the world's first computer programmer." },
+  { word: "bus seat", woman: "Rosa Parks", category: "Activism", bio: "Rosa Parks refused to give up her bus seat to a white passenger in 1955, sparking the Montgomery Bus Boycott. Her act of defiance became a symbol of the Civil Rights Movement." },
+  { word: "diary in hiding", woman: "Anne Frank", category: "Literature", bio: "Anne Frank wrote a diary while hiding from the Nazis during World War II, capturing the human spirit amid unimaginable horror. Her diary has been translated into over 70 languages." },
+  { word: "telescope and stars", woman: "Vera Rubin", category: "Science", bio: "Vera Rubin's observations of galaxy rotation provided the first strong evidence for the existence of dark matter. Her work fundamentally changed our understanding of the universe." },
+  { word: "gorillas in the mist", woman: "Dian Fossey", category: "Science", bio: "Dian Fossey dedicated her life to studying and protecting mountain gorillas in Rwanda. Her conservation efforts saved the species from the brink of extinction." },
+  { word: "tennis Grand Slam", woman: "Serena Williams", category: "Sports", bio: "Serena Williams won 23 Grand Slam singles titles, the most in the Open Era. She is widely considered one of the greatest athletes of all time." },
+  { word: "malaria vaccine", woman: "Tu Youyou", category: "Science", bio: "Tu Youyou discovered artemisinin, a treatment for malaria that has saved millions of lives worldwide. She became the first Chinese woman to win a Nobel Prize." },
+  { word: "Nobel Peace Prize youngest", woman: "Malala Yousafzai", category: "Activism", bio: "Malala Yousafzai survived a Taliban assassination attempt and became the youngest Nobel Peace Prize laureate at age 17. She continues to advocate for girls' education globally." },
+  { word: "space walk", woman: "Valentina Tereshkova", category: "Exploration", bio: "Valentina Tereshkova became the first woman in space in 1963, orbiting Earth 48 times. Her historic flight paved the way for women in space exploration." },
+  { word: "Underground Railroad", woman: "Harriet Tubman", category: "Activism", bio: "Harriet Tubman escaped slavery and led hundreds of others to freedom through the Underground Railroad. She was also a Union spy during the Civil War." },
+  { word: "ballet shoes", woman: "Misty Copeland", category: "Arts", bio: "Misty Copeland became the first African American woman to be named principal dancer at American Ballet Theatre. She broke barriers in the world of classical ballet." },
+  { word: "equal pay lawsuit", woman: "Lilly Ledbetter", category: "Activism", bio: "Lilly Ledbetter's fight against pay discrimination led to the Lilly Ledbetter Fair Pay Act of 2009. Her persistence changed workplace equality laws in America." },
+  { word: "DNA photograph", woman: "Rosalind Franklin", category: "Science", bio: "Rosalind Franklin's X-ray crystallography images were crucial to discovering DNA's double helix structure. Her contribution to molecular biology was groundbreaking." },
+  { word: "electric car factory", woman: "Mary Barra", category: "Politics", bio: "Mary Barra became the first female CEO of a major global automaker when she took the helm of General Motors. She has driven the company's transformation toward electric vehicles." },
+  { word: "courtroom gavel", woman: "Ruth Bader Ginsburg", category: "Politics", bio: "Ruth Bader Ginsburg served as a Supreme Court Justice and championed gender equality throughout her career. She became a cultural icon known as the 'Notorious RBG'." },
+  { word: "chemistry flask", woman: "Dorothy Hodgkin", category: "Science", bio: "Dorothy Hodgkin used X-ray crystallography to determine the structures of important biochemical substances including penicillin and insulin. She won the Nobel Prize in Chemistry in 1964." },
+  { word: "marathon finish line", woman: "Kathrine Switzer", category: "Sports", bio: "Kathrine Switzer became the first woman to officially run the Boston Marathon in 1967, despite attempts to physically remove her. She helped open marathon running to women worldwide." },
+  { word: "painting sunflowers", woman: "Georgia O'Keeffe", category: "Arts", bio: "Georgia O'Keeffe is known as the 'Mother of American Modernism' for her bold, large-scale flower paintings. She redefined the boundaries of American art in the 20th century." },
+  { word: "chimpanzee", woman: "Jane Goodall", category: "Science", bio: "Jane Goodall's groundbreaking research on chimpanzees in Tanzania transformed our understanding of primates and our relationship to the animal kingdom. She is the world's foremost expert on chimpanzees." },
+  { word: "fashion magazine cover", woman: "Anna Wintour", category: "Arts", bio: "Anna Wintour has served as editor-in-chief of Vogue since 1988, shaping global fashion and culture. She is one of the most powerful figures in the fashion industry." },
+  { word: "swimming pool gold medal", woman: "Katie Ledecky", category: "Sports", bio: "Katie Ledecky is one of the most decorated female swimmers in history, holding multiple world records. Her dominance in distance freestyle events is unprecedented." },
+  { word: "opera microphone", woman: "Maria Callas", category: "Arts", bio: "Maria Callas was the most renowned opera soprano of the 20th century, revitalizing the art of bel canto. Her extraordinary vocal range and dramatic intensity transformed opera performance." },
+  { word: "stethoscope", woman: "Elizabeth Blackwell", category: "Science", bio: "Elizabeth Blackwell was the first woman to receive a medical degree in the United States in 1849. She opened the door for women in medicine." },
+  { word: "airplane cockpit", woman: "Bessie Coleman", category: "Exploration", bio: "Bessie Coleman was the first African American woman and the first Native American woman to hold a pilot's license. She broke racial and gender barriers in early aviation." },
+  { word: "soccer World Cup trophy", woman: "Megan Rapinoe", category: "Sports", bio: "Megan Rapinoe led the US Women's National Team to World Cup victory and became a vocal advocate for equal pay in sports. She used her platform to fight for social justice." },
+  { word: "rocket launch", woman: "Mae Jemison", category: "Exploration", bio: "Mae Jemison became the first African American woman to travel in space in 1992. She is also a physician, engineer, and advocate for science education." },
+  { word: "protest sign and megaphone", woman: "Gloria Steinem", category: "Activism", bio: "Gloria Steinem co-founded Ms. Magazine and became one of the most visible leaders of the feminist movement in the 1960s and 70s. Her writing and activism transformed the conversation about women's rights." },
+  { word: "wheelchair and physics equations", woman: "Mileva Marić", category: "Science", bio: "Mileva Marić was a brilliant Serbian physicist and mathematician who was one of the first women to study physics in Europe. She collaborated closely with Albert Einstein during his most productive years." },
+  { word: "ink pen and novel", woman: "Toni Morrison", category: "Literature", bio: "Toni Morrison was the first African American woman to win the Nobel Prize in Literature. Her novels explored the African American experience with extraordinary depth and beauty." },
+];
