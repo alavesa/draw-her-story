@@ -6,83 +6,84 @@
 
 @layer base {
   :root {
-    --background: 40 20% 98%;
-    --foreground: 270 50% 15%;
+    --background: 30 30% 98%;
+    --foreground: 220 30% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 270 50% 15%;
+    --card-foreground: 220 30% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 270 50% 15%;
+    --popover-foreground: 220 30% 12%;
 
-    --primary: 263 70% 58%;
+    --primary: 340 75% 55%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 270 30% 94%;
-    --secondary-foreground: 270 50% 15%;
+    --secondary: 330 25% 94%;
+    --secondary-foreground: 220 30% 12%;
 
-    --muted: 270 15% 93%;
-    --muted-foreground: 270 10% 45%;
+    --muted: 330 10% 93%;
+    --muted-foreground: 220 10% 45%;
 
-    --accent: 330 81.1881% 60.3922%;
+    --accent: 15 85% 60%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 270 20% 90%;
-    --input: 270 20% 90%;
-    --ring: 263 70% 58%;
+    --border: 330 15% 90%;
+    --input: 330 15% 90%;
+    --ring: 340 75% 55%;
 
     --radius: 0;
 
-    --gradient-primary: linear-gradient(135deg, hsl(263 70% 58%), hsl(280 60% 45%));
-    --gradient-pink: linear-gradient(135deg, hsl(330 80% 55%), hsl(340 90% 65%));
-    --gradient-reveal: linear-gradient(135deg, hsl(270 60% 30%), hsl(263 70% 50%), hsl(280 50% 40%));
-    --shadow-card: 0 4px 20px -4px hsl(263 70% 58% / 0.15);
-    --shadow-elevated: 0 8px 40px -8px hsl(263 70% 58% / 0.25);
+    --gradient-primary: linear-gradient(135deg, hsl(330 80% 55%), hsl(15 85% 60%));
+    --gradient-pink: linear-gradient(135deg, hsl(340 75% 55%), hsl(320 70% 60%));
+    --gradient-reveal: linear-gradient(135deg, hsl(220 60% 40%), hsl(330 70% 50%), hsl(15 80% 55%));
+    --gradient-lovable: linear-gradient(180deg, hsl(220 80% 70%), hsl(330 75% 60%), hsl(15 85% 60%));
+    --shadow-card: 0 4px 20px -4px hsl(340 75% 55% / 0.15);
+    --shadow-elevated: 0 8px 40px -8px hsl(340 75% 55% / 0.25);
 
     --font-display: 'Playfair Display', serif;
     --font-body: 'DM Sans', sans-serif;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 263 70% 58%;
+    --sidebar-primary: 340 75% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 270 30% 94%;
-    --sidebar-accent-foreground: 270 50% 15%;
-    --sidebar-border: 270 20% 90%;
-    --sidebar-ring: 263 70% 58%;
+    --sidebar-accent: 330 25% 94%;
+    --sidebar-accent-foreground: 220 30% 12%;
+    --sidebar-border: 330 15% 90%;
+    --sidebar-ring: 340 75% 55%;
   }
 
   .dark {
-    --background: 270 30% 8%;
+    --background: 220 25% 8%;
     --foreground: 0 0% 95%;
-    --card: 270 25% 12%;
+    --card: 220 20% 12%;
     --card-foreground: 0 0% 95%;
-    --popover: 270 25% 12%;
+    --popover: 220 20% 12%;
     --popover-foreground: 0 0% 95%;
-    --primary: 263 70% 58%;
+    --primary: 340 75% 55%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 270 20% 18%;
+    --secondary: 330 15% 18%;
     --secondary-foreground: 0 0% 95%;
-    --muted: 270 15% 18%;
-    --muted-foreground: 270 10% 60%;
-    --accent: 330 80% 55%;
+    --muted: 220 12% 18%;
+    --muted-foreground: 220 10% 60%;
+    --accent: 15 85% 60%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 62% 30%;
     --destructive-foreground: 0 0% 95%;
-    --border: 270 15% 20%;
-    --input: 270 15% 20%;
-    --ring: 263 70% 58%;
-    --sidebar-background: 270 25% 10%;
+    --border: 220 12% 20%;
+    --input: 220 12% 20%;
+    --ring: 340 75% 55%;
+    --sidebar-background: 220 20% 10%;
     --sidebar-foreground: 0 0% 90%;
-    --sidebar-primary: 263 70% 58%;
+    --sidebar-primary: 340 75% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 270 15% 18%;
+    --sidebar-accent: 220 12% 18%;
     --sidebar-accent-foreground: 0 0% 90%;
-    --sidebar-border: 270 15% 20%;
-    --sidebar-ring: 263 70% 58%;
+    --sidebar-border: 220 12% 20%;
+    --sidebar-ring: 340 75% 55%;
   }
 }
 
@@ -108,6 +109,9 @@
   }
   .gradient-reveal {
     background: var(--gradient-reveal);
+  }
+  .gradient-lovable {
+    background: var(--gradient-lovable);
   }
   .shadow-card {
     box-shadow: var(--shadow-card);

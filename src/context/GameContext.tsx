@@ -38,7 +38,7 @@ export interface GameState {
   hostId: string;
 }
 
-const PLAYER_COLORS = ["#7C3AED", "#F59E0B", "#EF4444", "#3B82F6"];
+const PLAYER_COLORS = ["#E04580", "#F47A5B", "#5B8DEF", "#A855F7"];
 
 function generateRoomCode(): string {
   return Math.random().toString(36).substring(2, 8).toUpperCase();
