@@ -1,13 +1,21 @@
 import { useState } from "react";
 import { useGame } from "@/context/GameContext";
 import { AnimatePresence, motion } from "framer-motion";
-import { Play, Sparkles, UserPlus, X } from "lucide-react";
+import { Play, Sparkles, UserPlus, X, Volume2, VolumeX } from "lucide-react";
 import heroWomen from "@/assets/hero-women.png";
 import { buttonTap, buttonGlowHover, buttonHover } from "@/lib/animations";
+import { isSoundEnabled, setSoundEnabled, playClick } from "@/lib/sounds";
 
 export default function LandingPage() {
   const { dispatch } = useGame();
   const [names, setNames] = useState(["", ""]);
+  const [soundOn, setSoundOn] = useState(isSoundEnabled);
+
+  const toggleSound = () => {
+    const next = !soundOn;
+    setSoundOn(next);
+    setSoundEnabled(next);
+  };
 
   const trimmed = names.map(n => n.trim()).filter(Boolean);
   const allUnique = new Set(trimmed).size === trimmed.length;
@@ -27,6 +35,7 @@ export default function LandingPage() {
 
   const handleStart = () => {
     if (!canPlay) return;
+    playClick();
     dispatch({ type: "CREATE_ROOM", playerName: trimmed[0] });
     for (let i = 1; i < trimmed.length; i++) {
       dispatch({ type: "JOIN_ROOM", playerName: trimmed[i] });
@@ -36,6 +45,15 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-background relative overflow-hidden">
+      {/* Sound toggle */}
+      <button
+        onClick={toggleSound}
+        aria-label={soundOn ? "Mute sounds" : "Unmute sounds"}
+        className="absolute top-4 right-4 z-20 w-10 h-10 flex items-center justify-center bg-card/80 border border-border text-muted-foreground hover:text-foreground transition-colors backdrop-blur-sm"
+      >
+        {soundOn ? <Volume2 size={18} /> : <VolumeX size={18} />}
+      </button>
+
       {/* Full-screen hero background */}
       <motion.img
         src={heroWomen}

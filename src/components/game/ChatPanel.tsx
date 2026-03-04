@@ -3,11 +3,13 @@ import { useGame, ChatMessage } from "@/context/GameContext";
 import { AnimatePresence, motion } from "framer-motion";
 import { Send, Check } from "lucide-react";
 import { chatMessageVariants, buttonTap } from "@/lib/animations";
+import { playCloseGuess, playClick } from "@/lib/sounds";
 
 export default function ChatPanel() {
   const { state, dispatch } = useGame();
   const [input, setInput] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
+  const prevMsgCount = useRef(state.messages.length);
   const guessers = state.players.filter((_, i) => i !== state.currentArtistIndex);
   const [activeGuesserId, setActiveGuesserId] = useState(guessers[0]?.id ?? "");
 
@@ -18,6 +20,7 @@ export default function ChatPanel() {
     }
   }, [state.currentArtistIndex]);
 
+  // Scroll + close guess sound
   useEffect(() => {
     if (scrollRef.current) {
       requestAnimationFrame(() => {
@@ -26,6 +29,13 @@ export default function ChatPanel() {
         }
       });
     }
+    if (state.messages.length > prevMsgCount.current) {
+      const newMsgs = state.messages.slice(prevMsgCount.current);
+      if (newMsgs.some(m => m.type === "close")) {
+        playCloseGuess();
+      }
+    }
+    prevMsgCount.current = state.messages.length;
   }, [state.messages]);
 
   const activeGuesser = guessers.find(g => g.id === activeGuesserId) || guessers[0];
@@ -33,6 +43,7 @@ export default function ChatPanel() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || !activeGuesser) return;
+    playClick();
     dispatch({ type: "SUBMIT_GUESS", playerId: activeGuesser.id, text: input.trim() });
     setInput("");
   };

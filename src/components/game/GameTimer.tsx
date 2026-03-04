@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useGame } from "@/context/GameContext";
 import { AnimatePresence, motion } from "framer-motion";
 import { Clock } from "lucide-react";
+import { playTick, playTimerExpired } from "@/lib/sounds";
 
 export default function GameTimer() {
   const { state, dispatch } = useGame();
@@ -13,6 +14,20 @@ export default function GameTimer() {
     }, 1000);
     return () => clearInterval(interval);
   }, [state.phase, dispatch]);
+
+  const prevTime = useRef(state.timeRemaining);
+
+  useEffect(() => {
+    if (state.timeRemaining < prevTime.current) {
+      if (state.timeRemaining > 0 && state.timeRemaining <= 15) {
+        playTick();
+      }
+      if (state.timeRemaining === 0 && prevTime.current > 0) {
+        playTimerExpired();
+      }
+    }
+    prevTime.current = state.timeRemaining;
+  }, [state.timeRemaining]);
 
   const pct = (state.timeRemaining / 90) * 100;
   const isWarning = state.timeRemaining <= 30 && state.timeRemaining > 15;

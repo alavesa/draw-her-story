@@ -1,9 +1,11 @@
+import { useEffect } from "react";
 import { useGame } from "@/context/GameContext";
 import { motion } from "framer-motion";
 import { Trophy, Share2, RotateCcw, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { categoryEmojis } from "@/data/categoryEmojis";
 import { buttonTap, buttonHover, buttonGlowHover } from "@/lib/animations";
+import { playVictory } from "@/lib/sounds";
 import ConfettiCelebration from "./ConfettiCelebration";
 
 function getRank(sorted: { score: number }[], index: number): number {
@@ -18,6 +20,10 @@ export default function ResultsScreen() {
   const sorted = [...state.players].sort((a, b) => b.score - a.score);
   const isTie = sorted.length >= 2 && sorted[0].score === sorted[1].score;
   const discoveredWomen = state.guessedWords.length > 0 ? state.guessedWords : state.usedWords;
+
+  useEffect(() => {
+    playVictory();
+  }, []);
 
   const handleShare = async () => {
     const womenNames = discoveredWomen.map(w => w.woman).join(", ");

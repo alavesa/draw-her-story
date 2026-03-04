@@ -8,6 +8,7 @@ import ConfettiCelebration from "./ConfettiCelebration";
 import { AnimatePresence, motion } from "framer-motion";
 import { Eye, Palette, Sparkles } from "lucide-react";
 import { subPhaseVariants, buttonTap, buttonGlowHover } from "@/lib/animations";
+import { playCorrectGuess, playRoundStart } from "@/lib/sounds";
 
 export default function GameScreen() {
   const { state, dispatch } = useGame();
@@ -19,11 +20,19 @@ export default function GameScreen() {
   const [confettiKey, setConfettiKey] = useState(0);
   const prevMessageCount = useRef(state.messages.length);
 
+  // Sound on round start
+  useEffect(() => {
+    if (state.drawingSubPhase === "active") {
+      playRoundStart();
+    }
+  }, [state.drawingSubPhase]);
+
   useEffect(() => {
     if (state.messages.length > prevMessageCount.current) {
       const newMessages = state.messages.slice(prevMessageCount.current);
       if (newMessages.some(m => m.type === "correct")) {
         setConfettiKey(k => k + 1);
+        playCorrectGuess();
       }
     }
     prevMessageCount.current = state.messages.length;

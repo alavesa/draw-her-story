@@ -1,11 +1,17 @@
+import { useEffect } from "react";
 import { useGame } from "@/context/GameContext";
 import { motion } from "framer-motion";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { categoryEmojis } from "@/data/categoryEmojis";
 import { buttonTap, buttonHover } from "@/lib/animations";
+import { playReveal } from "@/lib/sounds";
 
 export default function RevealCard() {
   const { state, dispatch } = useGame();
+
+  useEffect(() => {
+    playReveal();
+  }, []);
   if (!state.currentWord) return null;
 
   const { woman, category, word, bio } = state.currentWord;
