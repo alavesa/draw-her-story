@@ -58,11 +58,12 @@ export default function LandingPage() {
       <motion.img
         src={heroWomen}
         alt=""
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.2 }}
-        transition={{ duration: 0.8 }}
+        initial={{ opacity: 0, scale: 1.15, y: 30 }}
+        animate={{ opacity: 0.22, scale: 1, y: 0 }}
+        transition={{ duration: 1.4, ease: "easeOut" }}
         aria-hidden="true"
         className="absolute inset-0 w-full h-full object-cover z-0"
+        style={{ transformOrigin: "center bottom" }}
       />
 
       {/* Decorative blobs */}
