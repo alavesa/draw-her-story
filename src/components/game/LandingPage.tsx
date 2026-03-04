@@ -103,7 +103,7 @@ export default function LandingPage() {
         <div className="space-y-3">
           {names.map((name, i) => (
             <div key={i}>
-              <label htmlFor={`player${i + 1}-name`} className="block text-xs font-body font-semibold text-foreground/60 uppercase tracking-wider mb-1">
+              <label htmlFor={`player${i + 1}-name`} className="block text-xs font-body font-semibold text-muted-foreground uppercase tracking-wider mb-1">
                 Player / Team {i + 1}
               </label>
               <div className="flex gap-2">

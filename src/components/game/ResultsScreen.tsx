@@ -67,14 +67,14 @@ export default function ResultsScreen() {
                 transition={{ delay: i * 0.15 }}
                 className={`flex items-center gap-3 sm:gap-4 p-3 sm:p-4 border ${isWinner ? "gradient-primary text-primary-foreground border-transparent shadow-elevated animate-pulse-glow" : "bg-card border-border shadow-card"}`}
               >
-                <span className={`text-2xl font-display font-bold ${isWinner ? "text-pink-300" : "text-muted-foreground"}`}>
+                <span className={`text-2xl font-display font-bold ${isWinner ? "text-accent-foreground" : "text-muted-foreground"}`}>
                   {isWinner ? "👑" : `#${rank}`}
                 </span>
                 <div className="w-10 h-10 rounded-full flex items-center justify-center font-body font-bold text-sm" style={{ backgroundColor: player.color + "33", color: player.color }}>
                   {player.name[0].toUpperCase()}
                 </div>
                 <span className={`flex-1 font-body font-semibold ${isWinner ? "" : "text-foreground"}`}>{player.name}</span>
-                <span className={`font-body font-bold text-xl ${isWinner ? "text-pink-300" : "text-accent"}`}>{player.score} pts</span>
+                <span className={`font-body font-bold text-xl ${isWinner ? "text-accent-foreground" : "text-accent"}`}>{player.score} pts</span>
               </motion.div>
             );
           })}

@@ -1,8 +1,8 @@
 import React, { useRef, useState, useCallback, useEffect, forwardRef, useImperativeHandle } from "react";
 import { Eraser, Undo2, Trash2 } from "lucide-react";
 
-const COLORS = ["#1a1a2e", "#7C3AED", "#F59E0B", "#EF4444", "#3B82F6"];
-const COLOR_NAMES = ["Black", "Purple", "Yellow", "Red", "Blue"];
+const COLORS = ["#1a1a2e", "#E04580", "#F47A5B", "#EF4444", "#5B8DEF"];
+const COLOR_NAMES = ["Black", "Pink", "Coral", "Red", "Blue"];
 const SIZE_NAMES = ["Small", "Medium", "Large"];
 const SIZES = [3, 8, 16];
 
