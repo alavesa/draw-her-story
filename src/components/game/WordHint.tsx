@@ -1,20 +1,32 @@
+import { useRef, useEffect, useState } from "react";
 import { useGame } from "@/context/GameContext";
+import { motion } from "framer-motion";
 
 export default function WordHint() {
   const { state } = useGame();
-  if (!state.currentWord) return null;
+  const [prevHintCount, setPrevHintCount] = useState(0);
+  const isFirstRender = useRef(true);
 
-  const word = state.currentWord.word;
+  const word = state.currentWord?.word ?? "";
   const totalChars = word.replace(/\s/g, "").length;
-  const hintsToShow = Math.min(state.revealedHints, Math.floor(totalChars * 0.6));
+  const hintsToShow = totalChars > 0 ? Math.min(state.revealedHints, Math.floor(totalChars * 0.6)) : 0;
+
+  // Track if new hints were just revealed
+  const hasNewHints = hintsToShow > prevHintCount && !isFirstRender.current;
+
+  // Update tracking after render — must be before any early return
+  useEffect(() => {
+    isFirstRender.current = false;
+    setPrevHintCount(hintsToShow);
+  }, [hintsToShow]);
+
+  if (!state.currentWord) return null;
 
   // Determine which character indices to reveal
   const charIndices: number[] = [];
-  let idx = 0;
   for (let i = 0; i < word.length; i++) {
     if (word[i] !== " ") {
       charIndices.push(i);
-      idx++;
     }
   }
 
@@ -37,14 +49,18 @@ export default function WordHint() {
         }
         const revealed = revealedPositions.has(i);
         return (
-          <span
-            key={i}
+          <motion.span
+            key={`${i}-${revealed}`}
+            initial={revealed && hasNewHints ? { rotateX: 90, opacity: 0 } : false}
+            animate={{ rotateX: 0, opacity: 1 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            style={{ perspective: 400 }}
             className={`inline-flex items-center justify-center w-5 h-7 sm:w-7 sm:h-9 border-b-2 font-body font-bold text-sm sm:text-lg ${
               revealed ? "border-accent text-accent bg-accent/10" : "border-muted-foreground/30 text-transparent bg-secondary"
             }`}
           >
             {revealed ? char : "_"}
-          </span>
+          </motion.span>
         );
       })}
     </div>

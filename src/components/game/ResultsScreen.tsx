@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { Trophy, Share2, RotateCcw, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { categoryEmojis } from "@/data/categoryEmojis";
+import { buttonTap, buttonHover, buttonGlowHover } from "@/lib/animations";
+import ConfettiCelebration from "./ConfettiCelebration";
 
 function getRank(sorted: { score: number }[], index: number): number {
   if (index === 0) return 1;
@@ -31,9 +33,16 @@ export default function ResultsScreen() {
 
   return (
     <div className="min-h-screen bg-background py-8 px-4">
+      <ConfettiCelebration trigger={true} />
       <div className="max-w-2xl mx-auto">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
-          <Trophy className="mx-auto text-accent mb-3" size={48} aria-hidden="true" />
+          <motion.div
+            initial={{ scale: 0, rotate: -20 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ type: "spring", stiffness: 200, damping: 12, delay: 0.2 }}
+          >
+            <Trophy className="mx-auto text-accent mb-3 animate-float" size={48} aria-hidden="true" />
+          </motion.div>
           <h1 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-2">Final Results</h1>
           <p className="text-muted-foreground font-body">
             {isTie ? "It's a tie — what a close game!" : "What an incredible game!"}
@@ -47,10 +56,10 @@ export default function ResultsScreen() {
             return (
               <motion.div
                 key={player.id}
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, x: -30, scale: 0.95 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
                 transition={{ delay: i * 0.15 }}
-                className={`flex items-center gap-3 sm:gap-4 p-3 sm:p-4 border ${isWinner ? "gradient-primary text-primary-foreground border-transparent shadow-elevated" : "bg-card border-border shadow-card"}`}
+                className={`flex items-center gap-3 sm:gap-4 p-3 sm:p-4 border ${isWinner ? "gradient-primary text-primary-foreground border-transparent shadow-elevated animate-pulse-glow" : "bg-card border-border shadow-card"}`}
               >
                 <span className={`text-2xl font-display font-bold ${isWinner ? "text-pink-300" : "text-muted-foreground"}`}>
                   {isWinner ? "👑" : `#${rank}`}
@@ -97,12 +106,22 @@ export default function ResultsScreen() {
         </motion.div>
 
         <div className="flex flex-col sm:flex-row gap-3 mt-8 justify-center">
-          <button onClick={handleShare} className="gradient-pink text-accent-foreground font-body font-bold py-3 px-6 hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+          <motion.button
+            whileHover={buttonGlowHover}
+            whileTap={buttonTap}
+            onClick={handleShare}
+            className="gradient-pink text-accent-foreground font-body font-bold py-3 px-6 hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+          >
             <Share2 size={18} aria-hidden="true" /> Share Results
-          </button>
-          <button onClick={() => dispatch({ type: "RESET" })} className="bg-secondary text-secondary-foreground font-body font-bold py-3 px-6 hover:bg-secondary/80 transition-colors flex items-center justify-center gap-2">
+          </motion.button>
+          <motion.button
+            whileHover={buttonHover}
+            whileTap={buttonTap}
+            onClick={() => dispatch({ type: "RESET" })}
+            className="bg-secondary text-secondary-foreground font-body font-bold py-3 px-6 hover:bg-secondary/80 transition-colors flex items-center justify-center gap-2"
+          >
             <RotateCcw size={18} aria-hidden="true" /> Play Again
-          </button>
+          </motion.button>
         </div>
       </div>
     </div>

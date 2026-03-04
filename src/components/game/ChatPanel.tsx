@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { useGame, ChatMessage } from "@/context/GameContext";
+import { AnimatePresence, motion } from "framer-motion";
 import { Send, Check } from "lucide-react";
+import { chatMessageVariants, buttonTap } from "@/lib/animations";
 
 export default function ChatPanel() {
   const { state, dispatch } = useGame();
@@ -18,7 +20,11 @@ export default function ChatPanel() {
 
   useEffect(() => {
     if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      requestAnimationFrame(() => {
+        if (scrollRef.current) {
+          scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+        }
+      });
     }
   }, [state.messages]);
 
@@ -37,9 +43,18 @@ export default function ChatPanel() {
         <h3 className="font-display font-semibold text-primary-foreground text-sm">Guesses</h3>
       </div>
       <div ref={scrollRef} role="log" aria-live="polite" aria-label="Game guesses" className="flex-1 overflow-y-auto p-2 sm:p-3 space-y-2 min-h-0" style={{ maxHeight: "clamp(150px, 30vh, 300px)" }}>
-        {state.messages.map((msg) => (
-          <MessageBubble key={msg.id} message={msg} />
-        ))}
+        <AnimatePresence initial={false}>
+          {state.messages.map((msg) => (
+            <motion.div
+              key={msg.id}
+              variants={chatMessageVariants}
+              initial="initial"
+              animate="animate"
+            >
+              <MessageBubble message={msg} />
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </div>
       {state.phase === "drawing" && (
         <div className="border-t border-border">
@@ -79,9 +94,14 @@ export default function ChatPanel() {
             placeholder="Type your guess..."
             className="flex-1 px-3 py-2 border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring"
           />
-          <button type="submit" aria-label="Send guess" className="w-9 h-9 gradient-primary flex items-center justify-center text-primary-foreground hover:opacity-90 transition-opacity">
+          <motion.button
+            whileTap={buttonTap}
+            type="submit"
+            aria-label="Send guess"
+            className="w-9 h-9 gradient-primary flex items-center justify-center text-primary-foreground hover:opacity-90 transition-opacity"
+          >
             <Send size={16} aria-hidden="true" />
-          </button>
+          </motion.button>
           </form>
         </div>
       )}
@@ -95,17 +115,28 @@ function MessageBubble({ message }: { message: ChatMessage }) {
   }
   if (message.type === "correct") {
     return (
-      <div className="flex items-center gap-2 px-3 py-2 bg-accent/10 border border-accent/30">
-        <Check size={14} className="text-accent shrink-0" />
+      <motion.div
+        initial={{ scale: 0.8 }}
+        animate={{ scale: 1 }}
+        transition={{ type: "spring", stiffness: 300, damping: 15 }}
+        className="flex items-center gap-2 px-3 py-2 bg-accent/10 border border-accent/30"
+      >
+        <motion.div animate={{ rotate: [0, 15, -15, 0] }} transition={{ duration: 0.5 }}>
+          <Check size={14} className="text-accent shrink-0" />
+        </motion.div>
         <span className="text-sm font-medium text-foreground">{message.playerName} guessed correctly!</span>
-      </div>
+      </motion.div>
     );
   }
   if (message.type === "close") {
     return (
-      <div className="px-3 py-2 bg-destructive/10 border border-destructive/20">
+      <motion.div
+        animate={{ x: [0, -4, 4, -4, 4, 0] }}
+        transition={{ duration: 0.4 }}
+        className="px-3 py-2 bg-destructive/10 border border-destructive/20"
+      >
         <span className="text-sm text-foreground"><strong>{message.playerName}:</strong> {message.text}</span>
-      </div>
+      </motion.div>
     );
   }
   return (

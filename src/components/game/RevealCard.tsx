@@ -2,6 +2,7 @@ import { useGame } from "@/context/GameContext";
 import { motion } from "framer-motion";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { categoryEmojis } from "@/data/categoryEmojis";
+import { buttonTap, buttonHover } from "@/lib/animations";
 
 export default function RevealCard() {
   const { state, dispatch } = useGame();
@@ -18,13 +19,24 @@ export default function RevealCard() {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="w-full max-w-lg"
       >
-        <div className="gradient-reveal p-4 sm:p-6 md:p-8 text-center shadow-elevated">
+        <div className="gradient-reveal p-4 sm:p-6 md:p-8 text-center shadow-elevated animate-pulse-glow relative overflow-hidden">
+          {/* Shimmer sweep */}
+          <motion.div
+            className="absolute inset-0 pointer-events-none"
+            initial={{ x: "-100%" }}
+            animate={{ x: "200%" }}
+            transition={{ duration: 1.2, delay: 0.5, ease: "easeInOut" }}
+            style={{
+              background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)",
+            }}
+          />
+
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
           >
-            <Sparkles className="mx-auto mb-3 text-pink-300" size={32} aria-hidden="true" />
+            <Sparkles className="mx-auto mb-3 text-pink-300 animate-float" size={32} aria-hidden="true" />
           </motion.div>
           <p className="text-purple-200 text-sm font-body uppercase tracking-widest mb-2">Did You Know?</p>
           <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-primary-foreground mb-2">{woman}</h2>
@@ -42,20 +54,28 @@ export default function RevealCard() {
             <h3 className="font-display text-lg font-semibold text-primary-foreground">Scores</h3>
             <div className="space-y-2 mb-4">
               {[...state.players].sort((a, b) => b.score - a.score).map((p, i) => (
-                <div key={p.id} className="flex items-center justify-between px-3 py-1.5 sm:px-4 sm:py-2 bg-primary-foreground/10">
+                <motion.div
+                  key={p.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.5 + i * 0.1 }}
+                  className="flex items-center justify-between px-3 py-1.5 sm:px-4 sm:py-2 bg-primary-foreground/10"
+                >
                   <span className="text-primary-foreground text-sm font-body">{i === 0 ? "👑" : ""} {p.name}</span>
                   <span className="text-pink-300 font-bold font-body">{p.score}</span>
-                </div>
+                </motion.div>
               ))}
             </div>
 
-            <button
+            <motion.button
+              whileHover={buttonHover}
+              whileTap={buttonTap}
               onClick={() => dispatch({ type: isLastRound ? "SHOW_RESULTS" : "NEXT_ROUND" })}
               className="gradient-pink text-accent-foreground font-body font-bold py-3 px-6 hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
             >
               {isLastRound ? "See Final Results" : "Next Round"}
               <ArrowRight size={18} aria-hidden="true" />
-            </button>
+            </motion.button>
           </div>
         </div>
       </motion.div>

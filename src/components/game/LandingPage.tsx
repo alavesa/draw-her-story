@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useGame } from "@/context/GameContext";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Play, Sparkles, UserPlus, X } from "lucide-react";
 import heroWomen from "@/assets/hero-women.png";
+import { buttonTap, buttonGlowHover, buttonHover } from "@/lib/animations";
 
 export default function LandingPage() {
   const { dispatch } = useGame();
@@ -94,39 +95,54 @@ export default function LandingPage() {
                   value={name}
                   onChange={e => updateName(i, e.target.value)}
                   maxLength={16}
-                  className="flex-1 px-5 py-3 border border-input bg-card text-foreground font-body text-center text-lg focus:outline-none focus:ring-2 focus:ring-ring shadow-card"
+                  className="flex-1 px-5 py-3 border border-input bg-card text-foreground font-body text-center text-lg focus:outline-none focus:ring-2 focus:ring-ring focus:scale-[1.02] transition-transform shadow-card"
                 />
                 {i >= 2 && (
-                  <button
+                  <motion.button
+                    whileHover={buttonHover}
+                    whileTap={buttonTap}
                     onClick={() => removePlayer(i)}
                     aria-label={`Remove player ${i + 1}`}
                     className="w-12 border border-input bg-card text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors flex items-center justify-center"
                   >
                     <X size={18} />
-                  </button>
+                  </motion.button>
                 )}
               </div>
             </div>
           ))}
 
-          {names.length < 3 && (
-            <button
-              onClick={addPlayer}
-              className="w-full py-2.5 border border-dashed border-input bg-card/50 text-muted-foreground font-body text-sm hover:text-foreground hover:border-foreground/30 transition-colors flex items-center justify-center gap-2"
-            >
-              <UserPlus size={16} />
-              Add Player / Team
-            </button>
-          )}
+          <AnimatePresence>
+            {names.length < 3 && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.25 }}
+              >
+                <motion.button
+                  whileHover={buttonHover}
+                  whileTap={buttonTap}
+                  onClick={addPlayer}
+                  className="w-full py-2.5 border border-dashed border-input bg-card/50 text-muted-foreground font-body text-sm hover:text-foreground hover:border-foreground/30 transition-colors flex items-center justify-center gap-2"
+                >
+                  <UserPlus size={16} />
+                  Add Player / Team
+                </motion.button>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-          <button
+          <motion.button
+            whileHover={canPlay ? buttonGlowHover : {}}
+            whileTap={canPlay ? buttonTap : {}}
             onClick={handleStart}
             disabled={!canPlay}
             className="w-full gradient-primary text-primary-foreground font-body font-bold py-3.5 hover:opacity-90 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2 shadow-elevated text-lg"
           >
             <Play size={20} />
             Play
-          </button>
+          </motion.button>
         </div>
       </motion.div>
 
