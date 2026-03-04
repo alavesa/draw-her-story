@@ -42,9 +42,9 @@ export default function RevealCard() {
             animate={{ scale: 1 }}
             transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
           >
-            <Sparkles className="mx-auto mb-3 text-pink-300 animate-float" size={32} aria-hidden="true" />
+            <Sparkles className="mx-auto mb-3 text-accent-foreground/70 animate-float" size={32} aria-hidden="true" />
           </motion.div>
-          <p className="text-purple-200 text-sm font-body uppercase tracking-widest mb-2">Did You Know?</p>
+          <p className="text-primary-foreground/80 text-sm font-body uppercase tracking-widest mb-2">Did You Know?</p>
           <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-primary-foreground mb-2">{woman}</h2>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-primary-foreground/10 text-primary-foreground/80 text-sm font-body mb-4">
             <span aria-hidden="true">{categoryEmojis[category] || "✨"}</span>
@@ -52,7 +52,7 @@ export default function RevealCard() {
           </div>
           <div className="bg-primary-foreground/10 p-3 sm:p-4 mb-4">
             <p className="text-primary-foreground/60 text-xs uppercase tracking-wider mb-1">The word was</p>
-            <p className="font-display text-xl font-semibold text-pink-300">"{word}"</p>
+            <p className="font-display text-xl font-semibold text-accent-foreground">"{word}"</p>
           </div>
           <p className="text-primary-foreground/85 font-body text-sm leading-relaxed mb-6">{bio}</p>
 
@@ -68,7 +68,7 @@ export default function RevealCard() {
                   className="flex items-center justify-between px-3 py-1.5 sm:px-4 sm:py-2 bg-primary-foreground/10"
                 >
                   <span className="text-primary-foreground text-sm font-body">{i === 0 ? "👑" : ""} {p.name}</span>
-                  <span className="text-pink-300 font-bold font-body">{p.score}</span>
+                  <span className="text-accent-foreground font-bold font-body">{p.score}</span>
                 </motion.div>
               ))}
             </div>
