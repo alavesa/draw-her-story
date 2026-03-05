@@ -327,6 +327,13 @@ export default class GameRoom implements Party.Server {
   // ── Game Logic ─────────────────────────────────────────────────────
 
   handleJoin(conn: Party.Connection, name: string) {
+    // Sanitize and validate name
+    if (typeof name !== "string") return;
+    const safeName = name.trim().slice(0, 16);
+    if (safeName.length === 0) {
+      this.sendToConnection(conn, { type: "error", message: "Name is required" });
+      return;
+    }
     if (this.state.phase !== "lobby") {
       this.sendToConnection(conn, { type: "error", message: "Game already in progress" });
       return;
@@ -341,7 +348,7 @@ export default class GameRoom implements Party.Server {
 
     const player: Player = {
       id: playerId,
-      name,
+      name: safeName,
       score: 0,
       color: PLAYER_COLORS[this.state.players.length],
       hasGuessedCorrectly: false,
@@ -396,6 +403,8 @@ export default class GameRoom implements Party.Server {
   handleGuess(playerId: string, text: string) {
     if (this.state.phase !== "drawing" || this.state.drawingSubPhase !== "active") return;
     if (!this.state.currentWord) return;
+    // Validate guess text
+    if (typeof text !== "string" || text.trim().length === 0 || text.length > 100) return;
 
     const player = this.state.players.find(p => p.id === playerId);
     if (!player || player.hasGuessedCorrectly) return;
