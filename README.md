@@ -4,7 +4,7 @@ A drawing and guessing game celebrating the women who changed the world. Built f
 
 **Play now at [drawherstory.win](https://drawherstory.win)**
 
-Here is a snippet of the game.
+Here is a snippet of the game (previous version in 1 device). **Noted that the Multi-device multiplayer is now supported!**
 ![gameplay](https://github.com/user-attachments/assets/05a1a3ba-8814-4e78-adf7-b481915e28e3)
 
 ## How It Works
