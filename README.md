@@ -25,7 +25,7 @@ Here is a snippet of the game (previous version in 1 device). **Noted that the M
 ## Features
 
 - 54 notable women across Science, Arts, Sports, Activism, Politics, Literature, and Exploration
-- Same-device pass-and-play — no accounts or internet needed
+- Same-device pass-and-play — no accounts needed
 - Multi-device multiplayer — each player on their own phone or laptop
 - Typo-tolerant guessing with letter hints that reveal over time
 - Real-time drawing sync across devices
