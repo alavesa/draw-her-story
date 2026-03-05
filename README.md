@@ -2,9 +2,7 @@
 
 A drawing and guessing game celebrating the women who changed the world. Built for International Women's Day as part of the [She Builds](https://shebuilds.lovable.app/) hackathon.
 
-**Play now at [drawherstory.win](https://drawherstory.win)**
-
-Here is a snippet of the game.
+**Play now at [drawherstory.win](https://drawherstory.win)** A snippet of the game:
 ![gameplay](https://github.com/user-attachments/assets/05a1a3ba-8814-4e78-adf7-b481915e28e3)
 
 ## How It Works
