@@ -282,6 +282,8 @@ interface GameContextType {
 
 const GameContext = createContext<GameContextType | null>(null);
 
+export { initialState };
+
 export function GameProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(gameReducer, initialState);
   return (

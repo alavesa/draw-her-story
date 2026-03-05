@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useGame } from "@/context/GameContext";
+import { useGameState } from "@/hooks/useGameState";
 import { motion } from "framer-motion";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { categoryEmojis } from "@/data/categoryEmojis";
@@ -7,7 +7,7 @@ import { buttonTap, buttonHover } from "@/lib/animations";
 import { playReveal } from "@/lib/sounds";
 
 export default function RevealCard() {
-  const { state, dispatch } = useGame();
+  const { state, dispatch, isMultiplayer, isHost } = useGameState();
 
   useEffect(() => {
     playReveal();
@@ -73,15 +73,21 @@ export default function RevealCard() {
               ))}
             </div>
 
-            <motion.button
-              whileHover={buttonHover}
-              whileTap={buttonTap}
-              onClick={() => dispatch({ type: isLastRound ? "SHOW_RESULTS" : "NEXT_ROUND" })}
-              className="gradient-pink text-accent-foreground font-body font-bold py-3 px-6 hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
-            >
-              {isLastRound ? "See Final Results" : "Next Round"}
-              <ArrowRight size={18} aria-hidden="true" />
-            </motion.button>
+            {(!isMultiplayer || isHost) ? (
+              <motion.button
+                whileHover={buttonHover}
+                whileTap={buttonTap}
+                onClick={() => dispatch({ type: isLastRound ? "SHOW_RESULTS" : "NEXT_ROUND" })}
+                className="gradient-pink text-accent-foreground font-body font-bold py-3 px-6 hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+              >
+                {isLastRound ? "See Final Results" : "Next Round"}
+                <ArrowRight size={18} aria-hidden="true" />
+              </motion.button>
+            ) : (
+              <div className="text-center py-3 text-primary-foreground/70 font-body text-sm">
+                Waiting for host...
+              </div>
+            )}
           </div>
         </div>
       </motion.div>

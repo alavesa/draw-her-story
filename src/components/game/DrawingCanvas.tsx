@@ -1,5 +1,6 @@
 import React, { useRef, useState, useCallback, useEffect, forwardRef, useImperativeHandle } from "react";
 import { Eraser, Undo2, Trash2 } from "lucide-react";
+import { useMultiplayer, StrokeData } from "@/context/MultiplayerContext";
 
 const COLORS = ["#1a1a2e", "#E04580", "#F47A5B", "#EF4444", "#5B8DEF"];
 const COLOR_NAMES = ["Black", "Pink", "Coral", "Red", "Blue"];
@@ -23,9 +24,15 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle, Props>(({ disabled = false
   const [isEraser, setIsEraser] = useState(false);
   const [history, setHistory] = useState<ImageData[]>([]);
   const lastPos = useRef<{ x: number; y: number } | null>(null);
+  const strokeBatch = useRef<StrokeData[]>([]);
+  const batchTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const mp = useMultiplayer();
+  const isMultiplayer = mp.isMultiplayer;
 
   const getCtx = useCallback(() => canvasRef.current?.getContext("2d"), []);
 
+  // Canvas resize
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -47,6 +54,75 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle, Props>(({ disabled = false
     window.addEventListener("resize", resize);
     return () => window.removeEventListener("resize", resize);
   }, []);
+
+  // Register remote stroke/clear/undo callbacks for multiplayer guessers
+  useEffect(() => {
+    if (!isMultiplayer) return;
+
+    mp.onRemoteStrokes.current = (strokes: StrokeData[]) => {
+      const canvas = canvasRef.current;
+      const ctx = canvas?.getContext("2d");
+      if (!ctx || !canvas) return;
+
+      for (const s of strokes) {
+        // Convert normalized coordinates (0-1) back to canvas pixels
+        const fromX = s.fromX * canvas.width;
+        const fromY = s.fromY * canvas.height;
+        const toX = s.toX * canvas.width;
+        const toY = s.toY * canvas.height;
+        const lineSize = s.size * Math.min(canvas.width, canvas.height);
+
+        ctx.beginPath();
+        ctx.moveTo(fromX, fromY);
+        ctx.lineTo(toX, toY);
+        ctx.strokeStyle = s.isEraser ? "#FFFFFF" : s.color;
+        ctx.lineWidth = s.isEraser ? lineSize * 2 : lineSize;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.stroke();
+      }
+    };
+
+    mp.onRemoteClear.current = () => {
+      const canvas = canvasRef.current;
+      const ctx = canvas?.getContext("2d");
+      if (ctx && canvas) {
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+    };
+
+    mp.onRemoteUndo.current = () => {
+      // Undo not fully supported for remote — clear is available
+    };
+
+    return () => {
+      mp.onRemoteStrokes.current = null;
+      mp.onRemoteClear.current = null;
+      mp.onRemoteUndo.current = null;
+    };
+  }, [isMultiplayer, mp]);
+
+  // Batch flush interval for artist stroke sync
+  useEffect(() => {
+    if (!isMultiplayer || disabled) return;
+
+    batchTimer.current = setInterval(() => {
+      if (strokeBatch.current.length > 0) {
+        mp.sendMessage({ type: "stroke", data: strokeBatch.current });
+        strokeBatch.current = [];
+      }
+    }, 100);
+
+    return () => {
+      if (batchTimer.current) clearInterval(batchTimer.current);
+      // Flush remaining strokes
+      if (strokeBatch.current.length > 0) {
+        mp.sendMessage({ type: "stroke", data: strokeBatch.current });
+        strokeBatch.current = [];
+      }
+    };
+  }, [isMultiplayer, disabled, mp]);
 
   useImperativeHandle(ref, () => ({
     getDataURL: () => canvasRef.current?.toDataURL() || "",
@@ -99,7 +175,8 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle, Props>(({ disabled = false
     if (!isDrawing || disabled) return;
     e.preventDefault();
     const ctx = getCtx();
-    if (!ctx || !lastPos.current) return;
+    const canvas = canvasRef.current;
+    if (!ctx || !lastPos.current || !canvas) return;
     const pos = getPos(e);
     ctx.beginPath();
     ctx.moveTo(lastPos.current.x, lastPos.current.y);
@@ -109,10 +186,31 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle, Props>(({ disabled = false
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
     ctx.stroke();
+
+    // In multiplayer, batch normalized stroke data for sync
+    if (isMultiplayer) {
+      strokeBatch.current.push({
+        fromX: lastPos.current.x / canvas.width,
+        fromY: lastPos.current.y / canvas.height,
+        toX: pos.x / canvas.width,
+        toY: pos.y / canvas.height,
+        color,
+        size: size / Math.min(canvas.width, canvas.height),
+        isEraser,
+      });
+    }
+
     lastPos.current = pos;
   };
 
-  const endDraw = () => setIsDrawing(false);
+  const endDraw = () => {
+    setIsDrawing(false);
+    // Flush any remaining strokes immediately on draw end
+    if (isMultiplayer && strokeBatch.current.length > 0) {
+      mp.sendMessage({ type: "stroke", data: strokeBatch.current });
+      strokeBatch.current = [];
+    }
+  };
 
   const undo = () => {
     const ctx = getCtx();
@@ -121,6 +219,9 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle, Props>(({ disabled = false
       const prev = history[history.length - 1];
       ctx.putImageData(prev, 0, 0);
       setHistory(h => h.slice(0, -1));
+      if (isMultiplayer) {
+        mp.sendMessage({ type: "undo-canvas" });
+      }
     }
   };
 
@@ -131,6 +232,9 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle, Props>(({ disabled = false
     if (ctx && canvas) {
       ctx.fillStyle = "#FFFFFF";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
+      if (isMultiplayer) {
+        mp.sendMessage({ type: "clear-canvas" });
+      }
     }
   };
 

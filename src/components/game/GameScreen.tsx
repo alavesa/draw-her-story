@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { useGame } from "@/context/GameContext";
+import { useGameState } from "@/hooks/useGameState";
 import DrawingCanvas from "./DrawingCanvas";
 import ChatPanel from "./ChatPanel";
 import GameTimer from "./GameTimer";
@@ -11,7 +11,7 @@ import { subPhaseVariants, buttonTap, buttonGlowHover } from "@/lib/animations";
 import { playCorrectGuess, playRoundStart } from "@/lib/sounds";
 
 export default function GameScreen() {
-  const { state, dispatch } = useGame();
+  const { state, dispatch, isMultiplayer, isArtist } = useGameState();
   const canvasRef = useRef(null);
   const artist = state.players[state.currentArtistIndex];
   const guessers = state.players.filter((_, i) => i !== state.currentArtistIndex);
@@ -38,12 +38,20 @@ export default function GameScreen() {
     prevMessageCount.current = state.messages.length;
   }, [state.messages]);
 
+  // In multiplayer, skip pass-to-artist; artist sees word, guessers wait
+  const showPassToArtist = !isMultiplayer && state.drawingSubPhase === "pass-to-artist";
+  const showShowingWord = isMultiplayer
+    ? state.drawingSubPhase === "showing-word" && isArtist
+    : state.drawingSubPhase === "showing-word";
+  const showWaitingForArtist = isMultiplayer && state.drawingSubPhase === "showing-word" && !isArtist;
+  const showActive = state.drawingSubPhase === "active";
+
   return (
     <>
       <ConfettiCelebration trigger={confettiKey > 0} key={confettiKey} />
       <AnimatePresence mode="wait">
-        {/* Step 1: Pass device to artist */}
-        {state.drawingSubPhase === "pass-to-artist" && (
+        {/* Step 1: Pass device to artist (local mode only) */}
+        {showPassToArtist && (
           <motion.div
             key="pass-to-artist"
             variants={subPhaseVariants}
@@ -87,8 +95,8 @@ export default function GameScreen() {
           </motion.div>
         )}
 
-        {/* Step 2: Show word to artist privately */}
-        {state.drawingSubPhase === "showing-word" && (
+        {/* Step 2: Show word to artist */}
+        {showShowingWord && (
           <motion.div
             key="showing-word"
             variants={subPhaseVariants}
@@ -130,8 +138,38 @@ export default function GameScreen() {
           </motion.div>
         )}
 
+        {/* Multiplayer: Waiting for artist to start */}
+        {showWaitingForArtist && (
+          <motion.div
+            key="waiting-for-artist"
+            variants={subPhaseVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className="min-h-screen flex items-center justify-center p-4 bg-background"
+          >
+            <div className="w-full max-w-md text-center">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+                className="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center font-display font-bold text-2xl"
+                style={{ backgroundColor: artist?.color + "22", color: artist?.color }}
+              >
+                {artist?.name[0].toUpperCase()}
+              </motion.div>
+              <h2 className="font-display text-2xl sm:text-3xl font-bold text-foreground mb-2">
+                {artist?.name} is getting ready to draw
+              </h2>
+              <p className="text-muted-foreground font-body mt-4">
+                The round will start soon...
+              </p>
+            </div>
+          </motion.div>
+        )}
+
         {/* Step 3: Active drawing phase */}
-        {state.drawingSubPhase === "active" && (
+        {showActive && (
           <motion.div
             key="active"
             variants={subPhaseVariants}
@@ -158,7 +196,6 @@ export default function GameScreen() {
                   <span className="text-xs font-body text-muted-foreground">
                     Round {state.roundIndex + 1}/{state.players.length}
                   </span>
-                  {/* Scores with pop animation */}
                   <div className="hidden sm:flex gap-2">
                     {state.players.map(p => (
                       <div key={p.id} className="flex items-center gap-1 px-2 py-1 bg-secondary text-xs font-body">
@@ -180,12 +217,10 @@ export default function GameScreen() {
             </div>
 
             <div className="max-w-6xl mx-auto p-2 sm:p-4">
-              {/* Timer */}
               <div className="mb-3 sm:mb-4">
                 <GameTimer />
               </div>
 
-              {/* Hint bar */}
               <div className="mb-3 sm:mb-4 bg-card border border-border p-2 sm:p-3 shadow-card">
                 <div className="flex items-center gap-2 mb-2 justify-center">
                   <Eye size={14} className="text-muted-foreground" aria-hidden="true" />
@@ -194,10 +229,9 @@ export default function GameScreen() {
                 <WordHint />
               </div>
 
-              {/* Canvas + Chat */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4">
                 <div className="lg:col-span-2">
-                  <DrawingCanvas ref={canvasRef} />
+                  <DrawingCanvas ref={canvasRef} disabled={isMultiplayer && !isArtist} />
                 </div>
                 <div className="lg:col-span-1">
                   <ChatPanel />

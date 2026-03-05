@@ -1,19 +1,21 @@
 import { useEffect, useRef } from "react";
-import { useGame } from "@/context/GameContext";
+import { useGameState } from "@/hooks/useGameState";
 import { AnimatePresence, motion } from "framer-motion";
 import { Clock } from "lucide-react";
 import { playTick, playTimerExpired } from "@/lib/sounds";
 
 export default function GameTimer() {
-  const { state, dispatch } = useGame();
+  const { state, dispatch, isMultiplayer } = useGameState();
 
+  // Only tick locally in local mode — server handles timer in multiplayer
   useEffect(() => {
+    if (isMultiplayer) return;
     if (state.phase !== "drawing") return;
     const interval = setInterval(() => {
       dispatch({ type: "TICK" });
     }, 1000);
     return () => clearInterval(interval);
-  }, [state.phase, dispatch]);
+  }, [state.phase, dispatch, isMultiplayer]);
 
   const prevTime = useRef(state.timeRemaining);
 

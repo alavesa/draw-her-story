@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useGame } from "@/context/GameContext";
+import { useGameState } from "@/hooks/useGameState";
 import { motion } from "framer-motion";
 import { Trophy, Share2, RotateCcw, Sparkles } from "lucide-react";
 import { toast } from "sonner";
@@ -16,7 +16,7 @@ function getRank(sorted: { score: number }[], index: number): number {
 }
 
 export default function ResultsScreen() {
-  const { state, dispatch } = useGame();
+  const { state, dispatch, isMultiplayer, isHost } = useGameState();
   const sorted = [...state.players].sort((a, b) => b.score - a.score);
   const isTie = sorted.length >= 2 && sorted[0].score === sorted[1].score;
   const discoveredWomen = state.guessedWords.length > 0 ? state.guessedWords : state.usedWords;
@@ -126,7 +126,7 @@ export default function ResultsScreen() {
             onClick={() => dispatch({ type: "RESET" })}
             className="bg-secondary text-secondary-foreground font-body font-bold py-3 px-6 hover:bg-secondary/80 transition-colors flex items-center justify-center gap-2"
           >
-            <RotateCcw size={18} aria-hidden="true" /> Play Again
+            <RotateCcw size={18} aria-hidden="true" /> {isMultiplayer && !isHost ? "Leave Room" : "Play Again"}
           </motion.button>
         </div>
       </div>

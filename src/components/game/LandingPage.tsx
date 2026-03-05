@@ -1,15 +1,20 @@
 import { useState } from "react";
 import { useGame } from "@/context/GameContext";
+import { useMultiplayer } from "@/context/MultiplayerContext";
 import { AnimatePresence, motion } from "framer-motion";
-import { Play, Sparkles, UserPlus, X, Volume2, VolumeX } from "lucide-react";
+import { Play, Sparkles, UserPlus, X, Volume2, VolumeX, Wifi, Monitor, ArrowLeft } from "lucide-react";
 import heroWomen from "@/assets/hero-women.png";
 import { buttonTap, buttonGlowHover, buttonHover } from "@/lib/animations";
 import { isSoundEnabled, setSoundEnabled, playClick } from "@/lib/sounds";
 
 export default function LandingPage() {
   const { dispatch } = useGame();
+  const mp = useMultiplayer();
   const [names, setNames] = useState(["", ""]);
   const [soundOn, setSoundOn] = useState(isSoundEnabled);
+  const [mode, setMode] = useState<"choose" | "local" | "multi-create" | "multi-join">("choose");
+  const [multiName, setMultiName] = useState("");
+  const [joinCode, setJoinCode] = useState("");
 
   const toggleSound = () => {
     const next = !soundOn;
@@ -17,6 +22,7 @@ export default function LandingPage() {
     setSoundEnabled(next);
   };
 
+  // ── Local mode logic ───────────────────────────────────────────
   const trimmed = names.map(n => n.trim()).filter(Boolean);
   const allUnique = new Set(trimmed).size === trimmed.length;
   const canPlay = trimmed.length >= 2 && allUnique;
@@ -33,7 +39,7 @@ export default function LandingPage() {
     setNames(prev => prev.filter((_, i) => i !== index));
   };
 
-  const handleStart = () => {
+  const handleLocalStart = () => {
     if (!canPlay) return;
     playClick();
     dispatch({ type: "CREATE_ROOM", playerName: trimmed[0] });
@@ -41,6 +47,21 @@ export default function LandingPage() {
       dispatch({ type: "JOIN_ROOM", playerName: trimmed[i] });
     }
     dispatch({ type: "START_GAME" });
+  };
+
+  // ── Multiplayer logic ──────────────────────────────────────────
+  const canMulti = multiName.trim().length > 0;
+
+  const handleCreateRoom = () => {
+    if (!canMulti) return;
+    playClick();
+    mp.createRoom(multiName.trim());
+  };
+
+  const handleJoinRoom = () => {
+    if (!canMulti || joinCode.trim().length < 4) return;
+    playClick();
+    mp.joinRoom(joinCode.trim(), multiName.trim());
   };
 
   return (
@@ -94,75 +115,180 @@ export default function LandingPage() {
         <p className="font-body text-foreground/70 text-base sm:text-lg font-medium mb-2">
           Sketch, Guess, and Celebrate the Women Who Changed the World
         </p>
-        <div className="inline-flex flex-wrap items-center justify-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 bg-card/80 border border-border backdrop-blur-sm mb-8">
-          <span className="font-body font-semibold text-foreground text-xs sm:text-sm">2–3 players or teams</span>
-          <span className="text-border hidden sm:inline">|</span>
-          <span className="text-muted-foreground font-body text-xs sm:text-sm">1 device · 1 round each · One draws, others guess</span>
-        </div>
 
-        <div className="space-y-3">
-          {names.map((name, i) => (
-            <div key={i}>
-              <label htmlFor={`player${i + 1}-name`} className="block text-xs font-body font-semibold text-muted-foreground uppercase tracking-wider mb-1">
-                Player / Team {i + 1}
-              </label>
-              <div className="flex gap-2">
-                <input
-                  id={`player${i + 1}-name`}
-                  type="text"
-                  placeholder="Enter name"
-                  value={name}
-                  onChange={e => updateName(i, e.target.value)}
-                  maxLength={16}
-                  className="flex-1 px-5 py-3 border border-input bg-card text-foreground font-body text-center text-lg focus:outline-none focus:ring-2 focus:ring-ring focus:scale-[1.02] transition-transform shadow-card"
-                />
-                {i >= 2 && (
+        {/* ── Mode chooser ─────────────────────────────────────── */}
+        {mode === "choose" && (
+          <div className="space-y-3 mt-6">
+            <motion.button
+              whileHover={buttonGlowHover}
+              whileTap={buttonTap}
+              onClick={() => setMode("local")}
+              className="w-full py-3.5 gradient-primary text-primary-foreground font-body font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-elevated text-lg"
+            >
+              <Monitor size={20} />
+              Same Device
+            </motion.button>
+            <motion.button
+              whileHover={buttonHover}
+              whileTap={buttonTap}
+              onClick={() => setMode("multi-create")}
+              className="w-full py-3.5 border border-border bg-card text-foreground font-body font-bold hover:bg-secondary transition-colors flex items-center justify-center gap-2 text-lg"
+            >
+              <Wifi size={20} />
+              Multi-Device
+            </motion.button>
+          </div>
+        )}
+
+        {/* ── Local mode ───────────────────────────────────────── */}
+        {mode === "local" && (
+          <div className="space-y-3 mt-4">
+            <button onClick={() => setMode("choose")} className="text-sm text-muted-foreground hover:text-foreground font-body flex items-center gap-1 mx-auto mb-2">
+              <ArrowLeft size={14} /> Back
+            </button>
+            <div className="inline-flex flex-wrap items-center justify-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 bg-card/80 border border-border backdrop-blur-sm mb-2">
+              <span className="font-body font-semibold text-foreground text-xs sm:text-sm">2–3 players or teams</span>
+              <span className="text-border hidden sm:inline">|</span>
+              <span className="text-muted-foreground font-body text-xs sm:text-sm">1 device · 1 round each</span>
+            </div>
+
+            {names.map((name, i) => (
+              <div key={i}>
+                <label htmlFor={`player${i + 1}-name`} className="block text-xs font-body font-semibold text-muted-foreground uppercase tracking-wider mb-1">
+                  Player / Team {i + 1}
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    id={`player${i + 1}-name`}
+                    type="text"
+                    placeholder="Enter name"
+                    value={name}
+                    onChange={e => updateName(i, e.target.value)}
+                    maxLength={16}
+                    className="flex-1 px-5 py-3 border border-input bg-card text-foreground font-body text-center text-lg focus:outline-none focus:ring-2 focus:ring-ring focus:scale-[1.02] transition-transform shadow-card"
+                  />
+                  {i >= 2 && (
+                    <motion.button
+                      whileHover={buttonHover}
+                      whileTap={buttonTap}
+                      onClick={() => removePlayer(i)}
+                      aria-label={`Remove player ${i + 1}`}
+                      className="w-12 border border-input bg-card text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors flex items-center justify-center"
+                    >
+                      <X size={18} />
+                    </motion.button>
+                  )}
+                </div>
+              </div>
+            ))}
+
+            <AnimatePresence>
+              {names.length < 3 && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.25 }}
+                >
                   <motion.button
                     whileHover={buttonHover}
                     whileTap={buttonTap}
-                    onClick={() => removePlayer(i)}
-                    aria-label={`Remove player ${i + 1}`}
-                    className="w-12 border border-input bg-card text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors flex items-center justify-center"
+                    onClick={addPlayer}
+                    className="w-full py-2.5 border border-dashed border-input bg-card/50 text-muted-foreground font-body text-sm hover:text-foreground hover:border-foreground/30 transition-colors flex items-center justify-center gap-2"
                   >
-                    <X size={18} />
+                    <UserPlus size={16} />
+                    Add Player / Team
                   </motion.button>
-                )}
-              </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            <motion.button
+              whileHover={canPlay ? buttonGlowHover : {}}
+              whileTap={canPlay ? buttonTap : {}}
+              onClick={handleLocalStart}
+              disabled={!canPlay}
+              className="w-full gradient-primary text-primary-foreground font-body font-bold py-3.5 hover:opacity-90 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2 shadow-elevated text-lg"
+            >
+              <Play size={20} />
+              Play
+            </motion.button>
+          </div>
+        )}
+
+        {/* ── Multi-device: Create room ────────────────────────── */}
+        {mode === "multi-create" && (
+          <div className="space-y-3 mt-4">
+            <button onClick={() => setMode("choose")} className="text-sm text-muted-foreground hover:text-foreground font-body flex items-center gap-1 mx-auto mb-2">
+              <ArrowLeft size={14} /> Back
+            </button>
+            <div className="inline-flex items-center gap-2 px-3 py-2 bg-card/80 border border-border backdrop-blur-sm mb-2">
+              <Wifi size={14} className="text-primary" />
+              <span className="text-muted-foreground font-body text-xs sm:text-sm">Each player on their own device</span>
             </div>
-          ))}
 
-          <AnimatePresence>
-            {names.length < 3 && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.25 }}
-              >
-                <motion.button
-                  whileHover={buttonHover}
-                  whileTap={buttonTap}
-                  onClick={addPlayer}
-                  className="w-full py-2.5 border border-dashed border-input bg-card/50 text-muted-foreground font-body text-sm hover:text-foreground hover:border-foreground/30 transition-colors flex items-center justify-center gap-2"
-                >
-                  <UserPlus size={16} />
-                  Add Player / Team
-                </motion.button>
-              </motion.div>
+            <div>
+              <label htmlFor="multi-name" className="block text-xs font-body font-semibold text-muted-foreground uppercase tracking-wider mb-1">
+                Your name
+              </label>
+              <input
+                id="multi-name"
+                type="text"
+                placeholder="Enter your name"
+                value={multiName}
+                onChange={e => setMultiName(e.target.value)}
+                maxLength={16}
+                className="w-full px-5 py-3 border border-input bg-card text-foreground font-body text-center text-lg focus:outline-none focus:ring-2 focus:ring-ring focus:scale-[1.02] transition-transform shadow-card"
+              />
+            </div>
+
+            <motion.button
+              whileHover={canMulti ? buttonGlowHover : {}}
+              whileTap={canMulti ? buttonTap : {}}
+              onClick={handleCreateRoom}
+              disabled={!canMulti}
+              className="w-full gradient-primary text-primary-foreground font-body font-bold py-3.5 hover:opacity-90 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2 shadow-elevated text-lg"
+            >
+              <Sparkles size={20} />
+              Create Room
+            </motion.button>
+
+            <div className="flex items-center gap-3 my-2">
+              <div className="flex-1 h-px bg-border" />
+              <span className="text-xs text-muted-foreground font-body">or</span>
+              <div className="flex-1 h-px bg-border" />
+            </div>
+
+            <div>
+              <label htmlFor="join-code" className="block text-xs font-body font-semibold text-muted-foreground uppercase tracking-wider mb-1">
+                Join with room code
+              </label>
+              <input
+                id="join-code"
+                type="text"
+                placeholder="Enter room code"
+                value={joinCode}
+                onChange={e => setJoinCode(e.target.value.toUpperCase())}
+                maxLength={6}
+                className="w-full px-5 py-3 border border-input bg-card text-foreground font-body text-center text-lg uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-ring focus:scale-[1.02] transition-transform shadow-card"
+              />
+            </div>
+
+            <motion.button
+              whileHover={canMulti && joinCode.trim().length >= 4 ? buttonHover : {}}
+              whileTap={canMulti && joinCode.trim().length >= 4 ? buttonTap : {}}
+              onClick={handleJoinRoom}
+              disabled={!canMulti || joinCode.trim().length < 4}
+              className="w-full border border-border bg-card text-foreground font-body font-bold py-3.5 hover:bg-secondary transition-colors disabled:opacity-40 flex items-center justify-center gap-2 text-lg"
+            >
+              Join Room
+            </motion.button>
+
+            {mp.error && (
+              <p className="text-sm text-destructive font-body">{mp.error}</p>
             )}
-          </AnimatePresence>
-
-          <motion.button
-            whileHover={canPlay ? buttonGlowHover : {}}
-            whileTap={canPlay ? buttonTap : {}}
-            onClick={handleStart}
-            disabled={!canPlay}
-            className="w-full gradient-primary text-primary-foreground font-body font-bold py-3.5 hover:opacity-90 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2 shadow-elevated text-lg"
-          >
-            <Play size={20} />
-            Play
-          </motion.button>
-        </div>
+          </div>
+        )}
       </motion.div>
 
       <footer className="relative z-10 mt-8 text-center space-y-1">

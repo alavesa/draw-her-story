@@ -1,0 +1,5 @@
+{
+  "name": "draw-her-story",
+  "main": "party/game.ts",
+  "compatibilityDate": "2024-12-01"
+}

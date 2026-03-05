@@ -1,12 +1,13 @@
 import { useState, useRef, useEffect } from "react";
-import { useGame, ChatMessage } from "@/context/GameContext";
+import { ChatMessage } from "@/context/GameContext";
+import { useGameState } from "@/hooks/useGameState";
 import { AnimatePresence, motion } from "framer-motion";
 import { Send, Check } from "lucide-react";
 import { chatMessageVariants, buttonTap } from "@/lib/animations";
 import { playCloseGuess, playClick } from "@/lib/sounds";
 
 export default function ChatPanel() {
-  const { state, dispatch } = useGame();
+  const { state, dispatch, isMultiplayer, isArtist, myPlayerId } = useGameState();
   const [input, setInput] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
   const prevMsgCount = useRef(state.messages.length);
@@ -40,13 +41,28 @@ export default function ChatPanel() {
 
   const activeGuesser = guessers.find(g => g.id === activeGuesserId) || guessers[0];
 
+  // In multiplayer, the current player submits guesses as themselves
+  // In local mode, the selected guesser tab determines who's guessing
+  const canSubmitGuess = isMultiplayer ? !isArtist : true;
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || !activeGuesser) return;
+    if (!input.trim() || !canSubmitGuess) return;
     playClick();
-    dispatch({ type: "SUBMIT_GUESS", playerId: activeGuesser.id, text: input.trim() });
+
+    if (isMultiplayer) {
+      // In multiplayer, submit-guess goes to server with just the text
+      dispatch({ type: "SUBMIT_GUESS", playerId: myPlayerId ?? "", text: input.trim() });
+    } else {
+      // In local mode, submit as the selected guesser
+      if (!activeGuesser) return;
+      dispatch({ type: "SUBMIT_GUESS", playerId: activeGuesser.id, text: input.trim() });
+    }
     setInput("");
   };
+
+  // Show guesser tabs only in local mode with multiple guessers
+  const showGuesserTabs = !isMultiplayer && guessers.length > 1;
 
   return (
     <div className="flex flex-col h-full border border-border bg-card shadow-card overflow-hidden">
@@ -67,9 +83,9 @@ export default function ChatPanel() {
           ))}
         </AnimatePresence>
       </div>
-      {state.phase === "drawing" && (
+      {state.phase === "drawing" && canSubmitGuess && (
         <div className="border-t border-border">
-          {guessers.length > 1 && (
+          {showGuesserTabs && (
             <div className="flex" role="tablist" aria-label="Select guesser">
               {guessers.map(g => {
                 const isActive = g.id === activeGuesser?.id;
