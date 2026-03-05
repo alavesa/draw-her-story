@@ -34,7 +34,14 @@ Here is a snippet of the game.
 ## Roadmap
 
 - [x] Multi-device multiplayer support
-- [ ] More notable women and categories
+- [ ] More notable women and categories (100+, regional packs, era filters)
+- [ ] Difficulty levels (Easy / Medium / Hard)
+- [ ] Drawing replay timelapse on results screen
+- [ ] Shareable results image for social media
+- [ ] Speed round mode (30-second rapid-fire)
+- [ ] Drawing restrictions (random modifiers like "no curves")
+- [ ] Best drawing vote at end of game
+- [ ] Light/dark mode toggle
 
 ## Getting Started
 
