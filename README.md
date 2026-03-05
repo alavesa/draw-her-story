@@ -4,6 +4,9 @@ A drawing and guessing game celebrating the women who changed the world. Built f
 
 **Play now at [drawherstory.win](https://drawherstory.win)**
 
+Here is a snippet of the game.
+![gameplay](https://github.com/user-attachments/assets/05a1a3ba-8814-4e78-adf7-b481915e28e3)
+
 ## How It Works
 
 1. 2–3 players or teams enter their names
