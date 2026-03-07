@@ -67,7 +67,7 @@ export default function ResultsScreen() {
                 transition={{ delay: i * 0.15 }}
                 className={`flex items-center gap-3 sm:gap-4 p-3 sm:p-4 border ${isWinner ? "gradient-primary text-primary-foreground border-transparent shadow-elevated animate-pulse-glow" : "bg-card border-border shadow-card"}`}
               >
-                <span className={`text-2xl font-display font-bold ${isWinner ? "text-accent-foreground" : "text-muted-foreground"}`}>
+                <span className={`text-2xl font-display font-bold ${isWinner ? "text-accent-foreground" : "text-muted-foreground"}`} aria-label={isWinner ? "Winner" : `Rank ${rank}`}>
                   {isWinner ? "👑" : `#${rank}`}
                 </span>
                 <div className="w-10 h-10 rounded-full flex items-center justify-center font-body font-bold text-sm" style={{ backgroundColor: player.color + "33", color: player.color }}>
@@ -116,7 +116,7 @@ export default function ResultsScreen() {
             whileHover={buttonGlowHover}
             whileTap={buttonTap}
             onClick={handleShare}
-            className="gradient-pink text-accent-foreground font-body font-bold py-3 px-6 hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+            className="gradient-pink text-accent-foreground font-body font-bold py-3 px-6 hover:opacity-90 transition-opacity flex items-center justify-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
             <Share2 size={18} aria-hidden="true" /> Share Results
           </motion.button>
@@ -124,7 +124,7 @@ export default function ResultsScreen() {
             whileHover={buttonHover}
             whileTap={buttonTap}
             onClick={() => dispatch({ type: "RESET" })}
-            className="bg-secondary text-secondary-foreground font-body font-bold py-3 px-6 hover:bg-secondary/80 transition-colors flex items-center justify-center gap-2"
+            className="bg-secondary text-secondary-foreground font-body font-bold py-3 px-6 hover:bg-secondary/80 transition-colors flex items-center justify-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
             <RotateCcw size={18} aria-hidden="true" /> {isMultiplayer && !isHost ? "Leave Room" : "Play Again"}
           </motion.button>

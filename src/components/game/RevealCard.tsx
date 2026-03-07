@@ -18,7 +18,8 @@ export default function RevealCard() {
   const isLastRound = state.currentArtistIndex >= state.players.length - 1;
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-background">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-background" role="main">
+      <h1 className="sr-only">Did You Know? {woman}</h1>
       <motion.div
         initial={{ scale: 0.8, opacity: 0, y: 30 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
@@ -67,7 +68,7 @@ export default function RevealCard() {
                   transition={{ delay: 0.5 + i * 0.1 }}
                   className="flex items-center justify-between px-3 py-1.5 sm:px-4 sm:py-2 bg-primary-foreground/10"
                 >
-                  <span className="text-primary-foreground text-sm font-body">{i === 0 ? "👑" : ""} {p.name}</span>
+                  <span className="text-primary-foreground text-sm font-body"><span aria-label={i === 0 ? "Leader" : undefined}>{i === 0 ? "👑" : ""}</span> {p.name}</span>
                   <span className="text-accent-foreground font-bold font-body">{p.score}</span>
                 </motion.div>
               ))}
@@ -78,7 +79,7 @@ export default function RevealCard() {
                 whileHover={buttonHover}
                 whileTap={buttonTap}
                 onClick={() => dispatch({ type: isLastRound ? "SHOW_RESULTS" : "NEXT_ROUND" })}
-                className="gradient-pink text-accent-foreground font-body font-bold py-3 px-6 hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+                className="gradient-pink text-accent-foreground font-body font-bold py-3 px-6 hover:opacity-90 transition-opacity flex items-center justify-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
               >
                 {isLastRound ? "See Final Results" : "Next Round"}
                 <ArrowRight size={18} aria-hidden="true" />

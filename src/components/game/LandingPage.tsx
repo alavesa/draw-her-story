@@ -70,7 +70,7 @@ export default function LandingPage() {
       <button
         onClick={toggleSound}
         aria-label={soundOn ? "Mute sounds" : "Unmute sounds"}
-        className="absolute top-4 right-4 z-20 w-10 h-10 flex items-center justify-center bg-card/80 border border-border text-muted-foreground hover:text-foreground transition-colors backdrop-blur-sm"
+        className="absolute top-4 right-4 z-20 w-10 h-10 flex items-center justify-center bg-card/80 border border-border text-muted-foreground hover:text-foreground transition-colors backdrop-blur-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
       >
         {soundOn ? <Volume2 size={18} /> : <VolumeX size={18} />}
       </button>
@@ -82,7 +82,6 @@ export default function LandingPage() {
         initial={{ opacity: 0, scale: 1.15, y: 30 }}
         animate={{ opacity: 0.22, scale: 1, y: 0 }}
         transition={{ duration: 1.4, ease: "easeOut" }}
-        aria-hidden="true"
         className="absolute inset-0 w-full h-full object-cover z-0"
         style={{ transformOrigin: "center bottom" }}
       />
@@ -123,18 +122,18 @@ export default function LandingPage() {
               whileHover={buttonGlowHover}
               whileTap={buttonTap}
               onClick={() => setMode("local")}
-              className="w-full py-3.5 gradient-primary text-primary-foreground font-body font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-elevated text-lg"
+              className="w-full py-3.5 gradient-primary text-primary-foreground font-body font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-elevated text-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
-              <Monitor size={20} />
+              <Monitor size={20} aria-hidden="true" />
               Same Device
             </motion.button>
             <motion.button
               whileHover={buttonHover}
               whileTap={buttonTap}
               onClick={() => setMode("multi-create")}
-              className="w-full py-3.5 border border-border bg-card text-foreground font-body font-bold hover:bg-secondary transition-colors flex items-center justify-center gap-2 text-lg"
+              className="w-full py-3.5 border border-border bg-card text-foreground font-body font-bold hover:bg-secondary transition-colors flex items-center justify-center gap-2 text-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
-              <Wifi size={20} />
+              <Wifi size={20} aria-hidden="true" />
               Multi-Device
             </motion.button>
           </div>
@@ -143,8 +142,8 @@ export default function LandingPage() {
         {/* ── Local mode ───────────────────────────────────────── */}
         {mode === "local" && (
           <div className="space-y-3 mt-4">
-            <button onClick={() => setMode("choose")} className="text-sm text-muted-foreground hover:text-foreground font-body flex items-center gap-1 mx-auto mb-2">
-              <ArrowLeft size={14} /> Back
+            <button onClick={() => setMode("choose")} className="text-sm text-muted-foreground hover:text-foreground font-body flex items-center gap-1 mx-auto mb-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+              <ArrowLeft size={14} aria-hidden="true" /> Back
             </button>
             <div className="inline-flex flex-wrap items-center justify-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 bg-card/80 border border-border backdrop-blur-sm mb-2">
               <span className="font-body font-semibold text-foreground text-xs sm:text-sm">2–3 players or teams</span>
@@ -208,9 +207,10 @@ export default function LandingPage() {
               whileTap={canPlay ? buttonTap : {}}
               onClick={handleLocalStart}
               disabled={!canPlay}
-              className="w-full gradient-primary text-primary-foreground font-body font-bold py-3.5 hover:opacity-90 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2 shadow-elevated text-lg"
+              aria-disabled={!canPlay}
+              className="w-full gradient-primary text-primary-foreground font-body font-bold py-3.5 hover:opacity-90 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2 shadow-elevated text-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
-              <Play size={20} />
+              <Play size={20} aria-hidden="true" />
               Play
             </motion.button>
           </div>
@@ -219,11 +219,11 @@ export default function LandingPage() {
         {/* ── Multi-device: Create room ────────────────────────── */}
         {mode === "multi-create" && (
           <div className="space-y-3 mt-4">
-            <button onClick={() => setMode("choose")} className="text-sm text-muted-foreground hover:text-foreground font-body flex items-center gap-1 mx-auto mb-2">
-              <ArrowLeft size={14} /> Back
+            <button onClick={() => setMode("choose")} className="text-sm text-muted-foreground hover:text-foreground font-body flex items-center gap-1 mx-auto mb-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+              <ArrowLeft size={14} aria-hidden="true" /> Back
             </button>
             <div className="inline-flex items-center gap-2 px-3 py-2 bg-card/80 border border-border backdrop-blur-sm mb-2">
-              <Wifi size={14} className="text-primary" />
+              <Wifi size={14} className="text-primary" aria-hidden="true" />
               <span className="text-muted-foreground font-body text-xs sm:text-sm">Each player on their own device</span>
             </div>
 
@@ -247,9 +247,10 @@ export default function LandingPage() {
               whileTap={canMulti ? buttonTap : {}}
               onClick={handleCreateRoom}
               disabled={!canMulti}
-              className="w-full gradient-primary text-primary-foreground font-body font-bold py-3.5 hover:opacity-90 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2 shadow-elevated text-lg"
+              aria-disabled={!canMulti}
+              className="w-full gradient-primary text-primary-foreground font-body font-bold py-3.5 hover:opacity-90 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2 shadow-elevated text-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
-              <Sparkles size={20} />
+              <Sparkles size={20} aria-hidden="true" />
               Create Room
             </motion.button>
 
@@ -279,7 +280,8 @@ export default function LandingPage() {
               whileTap={canMulti && joinCode.trim().length >= 4 ? buttonTap : {}}
               onClick={handleJoinRoom}
               disabled={!canMulti || joinCode.trim().length < 4}
-              className="w-full border border-border bg-card text-foreground font-body font-bold py-3.5 hover:bg-secondary transition-colors disabled:opacity-40 flex items-center justify-center gap-2 text-lg"
+              aria-disabled={!canMulti || joinCode.trim().length < 4}
+              className="w-full border border-border bg-card text-foreground font-body font-bold py-3.5 hover:bg-secondary transition-colors disabled:opacity-40 flex items-center justify-center gap-2 text-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
               Join Room
             </motion.button>

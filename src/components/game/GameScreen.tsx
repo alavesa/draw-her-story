@@ -60,13 +60,15 @@ export default function GameScreen() {
             exit="exit"
             className="min-h-screen flex items-center justify-center p-4 bg-background"
           >
-            <div className="w-full max-w-md text-center">
+            <div className="w-full max-w-md text-center" role="status" aria-live="polite">
+              <h1 className="sr-only">Pass the device to {artist?.name}</h1>
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
                 className="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center font-display font-bold text-2xl"
                 style={{ backgroundColor: artist?.color + "22", color: artist?.color }}
+                aria-hidden="true"
               >
                 {artist?.name[0].toUpperCase()}
               </motion.div>
@@ -86,7 +88,7 @@ export default function GameScreen() {
                 whileHover={buttonGlowHover}
                 whileTap={buttonTap}
                 onClick={() => dispatch({ type: "ARTIST_PEEK" })}
-                className="w-full gradient-primary text-primary-foreground font-body font-bold py-4 hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-elevated text-lg"
+                className="w-full gradient-primary text-primary-foreground font-body font-bold py-4 hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-elevated text-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
               >
                 <Sparkles size={20} aria-hidden="true" />
                 I'm {artist?.name} — Show my word
@@ -105,7 +107,8 @@ export default function GameScreen() {
             exit="exit"
             className="min-h-screen flex items-center justify-center p-4 bg-background"
           >
-            <div className="w-full max-w-md text-center">
+            <div className="w-full max-w-md text-center" role="status" aria-live="polite">
+              <h1 className="sr-only">Your word to draw: {state.currentWord?.word}</h1>
               <div className="bg-card border border-border p-5 sm:p-8 shadow-elevated mb-6">
                 <div className="flex items-center justify-center gap-2 mb-3">
                   <Palette size={18} className="text-primary" aria-hidden="true" />
@@ -127,7 +130,7 @@ export default function GameScreen() {
                 whileHover={buttonGlowHover}
                 whileTap={buttonTap}
                 onClick={() => dispatch({ type: "START_DRAWING" })}
-                className="w-full gradient-primary text-primary-foreground font-body font-bold py-4 hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-elevated text-lg"
+                className="w-full gradient-primary text-primary-foreground font-body font-bold py-4 hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-elevated text-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
               >
                 Got it — Start drawing!
               </motion.button>
@@ -148,13 +151,15 @@ export default function GameScreen() {
             exit="exit"
             className="min-h-screen flex items-center justify-center p-4 bg-background"
           >
-            <div className="w-full max-w-md text-center">
+            <div className="w-full max-w-md text-center" role="status" aria-live="polite">
+              <h1 className="sr-only">Waiting for {artist?.name} to start drawing</h1>
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
                 className="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center font-display font-bold text-2xl"
                 style={{ backgroundColor: artist?.color + "22", color: artist?.color }}
+                aria-hidden="true"
               >
                 {artist?.name[0].toUpperCase()}
               </motion.div>
@@ -180,6 +185,7 @@ export default function GameScreen() {
             role="main"
             aria-label="Game screen"
           >
+            <h1 className="sr-only">Drawing round {state.roundIndex + 1} — {artist?.name} is drawing</h1>
             {/* Header */}
             <div className="border-b border-border bg-card/80 backdrop-blur-sm px-3 py-2 sm:px-4 sm:py-3">
               <div className="max-w-6xl mx-auto flex items-center justify-between">

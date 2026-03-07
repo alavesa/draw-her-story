@@ -244,7 +244,8 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle, Props>(({ disabled = false
         <canvas
           ref={canvasRef}
           role="img"
-          aria-label="Drawing canvas area"
+          aria-label={disabled ? "Drawing canvas — only the artist can draw this round" : "Drawing canvas — draw your word here"}
+          aria-disabled={disabled}
           className={`w-full touch-none ${disabled ? "opacity-60 cursor-not-allowed" : "cursor-crosshair"}`}
           style={{ height: "clamp(280px, 40vh, 500px)" }}
           onMouseDown={startDraw}
@@ -257,26 +258,30 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle, Props>(({ disabled = false
         />
       </div>
       {!disabled && (
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3 justify-center">
-          <div className="flex gap-1 sm:gap-1.5">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 justify-center" role="toolbar" aria-label="Drawing tools">
+          <div className="flex gap-1 sm:gap-1.5" role="radiogroup" aria-label="Brush color">
             {COLORS.map((c, i) => (
               <button
                 key={c}
+                type="button"
                 onClick={() => { setColor(c); setIsEraser(false); }}
-                aria-label={`${COLOR_NAMES[i]} color${color === c && !isEraser ? " (selected)" : ""}`}
-                className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 transition-transform ${color === c && !isEraser ? "scale-125 border-foreground" : "border-transparent hover:scale-110"}`}
+                aria-label={`${COLOR_NAMES[i]} color`}
+                aria-pressed={color === c && !isEraser}
+                className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full border-2 transition-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${color === c && !isEraser ? "scale-125 border-foreground ring-2 ring-foreground/30" : "border-transparent hover:scale-110"}`}
                 style={{ backgroundColor: c }}
               />
             ))}
           </div>
-          <div className="w-px h-5 sm:h-6 bg-border" />
-          <div className="flex gap-1 sm:gap-1.5">
+          <div className="w-px h-5 sm:h-6 bg-border" aria-hidden="true" />
+          <div className="flex gap-1 sm:gap-1.5" role="radiogroup" aria-label="Brush size">
             {SIZES.map((s, i) => (
               <button
                 key={s}
+                type="button"
                 onClick={() => setSize(s)}
-                aria-label={`${SIZE_NAMES[i]} brush${size === s ? " (selected)" : ""}`}
-                className={`w-7 h-7 sm:w-8 sm:h-8 border flex items-center justify-center transition-all ${size === s ? "bg-primary border-primary" : "bg-card border-border hover:bg-secondary"}`}
+                aria-label={`${SIZE_NAMES[i]} brush`}
+                aria-pressed={size === s}
+                className={`w-8 h-8 sm:w-9 sm:h-9 border flex items-center justify-center transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${size === s ? "bg-primary border-primary" : "bg-card border-border hover:bg-secondary"}`}
               >
                 <div
                   className="rounded-full"
@@ -285,19 +290,20 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle, Props>(({ disabled = false
               </button>
             ))}
           </div>
-          <div className="w-px h-5 sm:h-6 bg-border" />
+          <div className="w-px h-5 sm:h-6 bg-border" aria-hidden="true" />
           <button
+            type="button"
             onClick={() => setIsEraser(!isEraser)}
-            aria-label={isEraser ? "Eraser (active)" : "Eraser"}
+            aria-label="Eraser"
             aria-pressed={isEraser}
-            className={`w-7 h-7 sm:w-8 sm:h-8 border flex items-center justify-center transition-all ${isEraser ? "bg-primary border-primary text-primary-foreground" : "bg-card border-border hover:bg-secondary"}`}
+            className={`w-8 h-8 sm:w-9 sm:h-9 border flex items-center justify-center transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${isEraser ? "bg-primary border-primary text-primary-foreground" : "bg-card border-border hover:bg-secondary"}`}
           >
             <Eraser size={16} aria-hidden="true" />
           </button>
-          <button onClick={undo} aria-label="Undo" className="w-7 h-7 sm:w-8 sm:h-8 border border-border bg-card hover:bg-secondary flex items-center justify-center">
+          <button type="button" onClick={undo} aria-label="Undo last stroke" className="w-8 h-8 sm:w-9 sm:h-9 border border-border bg-card hover:bg-secondary flex items-center justify-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
             <Undo2 size={16} aria-hidden="true" />
           </button>
-          <button onClick={clearCanvas} aria-label="Clear canvas" className="w-7 h-7 sm:w-8 sm:h-8 border border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground flex items-center justify-center transition-all">
+          <button type="button" onClick={clearCanvas} aria-label="Clear entire canvas" className="w-8 h-8 sm:w-9 sm:h-9 border border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground flex items-center justify-center transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
             <Trash2 size={16} aria-hidden="true" />
           </button>
         </div>

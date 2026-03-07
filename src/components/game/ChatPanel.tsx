@@ -9,6 +9,7 @@ import { playCloseGuess, playClick } from "@/lib/sounds";
 export default function ChatPanel() {
   const { state, dispatch, isMultiplayer, isArtist, myPlayerId } = useGameState();
   const [input, setInput] = useState("");
+  const [lastFeedback, setLastFeedback] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
   const prevMsgCount = useRef(state.messages.length);
   const guessers = state.players.filter((_, i) => i !== state.currentArtistIndex);
@@ -34,6 +35,11 @@ export default function ChatPanel() {
       const newMsgs = state.messages.slice(prevMsgCount.current);
       if (newMsgs.some(m => m.type === "close")) {
         playCloseGuess();
+        setLastFeedback("Close guess! Try again.");
+      } else if (newMsgs.some(m => m.type === "correct")) {
+        setLastFeedback("Correct!");
+      } else if (newMsgs.some(m => m.type === "wrong")) {
+        setLastFeedback("Wrong guess. Keep trying!");
       }
     }
     prevMsgCount.current = state.messages.length;
@@ -67,8 +73,9 @@ export default function ChatPanel() {
   return (
     <div className="flex flex-col h-full border border-border bg-card shadow-card overflow-hidden">
       <div className="px-3 py-2 sm:px-4 sm:py-3 gradient-primary">
-        <h3 className="font-display font-semibold text-primary-foreground text-sm">Guesses</h3>
+        <h2 className="font-display font-semibold text-primary-foreground text-sm">Guesses</h2>
       </div>
+      <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">{lastFeedback}</div>
       <div ref={scrollRef} role="log" aria-live="polite" aria-label="Game guesses" className="flex-1 overflow-y-auto p-2 sm:p-3 space-y-2 min-h-0" style={{ maxHeight: "clamp(150px, 30vh, 300px)" }}>
         <AnimatePresence initial={false}>
           {state.messages.map((msg) => (
@@ -97,13 +104,14 @@ export default function ChatPanel() {
                     aria-selected={isActive}
                     disabled={hasGuessed}
                     onClick={() => setActiveGuesserId(g.id)}
-                    className={`flex-1 py-1.5 text-xs font-body font-semibold transition-colors ${
+                    className={`flex-1 py-1.5 text-xs font-body font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
                       hasGuessed
                         ? "text-muted-foreground/50 line-through cursor-not-allowed"
                         : isActive
                           ? "bg-primary/10 text-primary border-b-2 border-primary"
                           : "text-muted-foreground hover:text-foreground"
                     }`}
+                    aria-disabled={hasGuessed}
                     style={isActive && !hasGuessed ? { color: g.color } : undefined}
                   >
                     {g.name}
@@ -113,11 +121,12 @@ export default function ChatPanel() {
             </div>
           )}
           <form onSubmit={handleSubmit} aria-label="Submit a guess" className="p-2 sm:p-3 flex gap-2">
+          <label htmlFor="guess-input" className="sr-only">Type your guess</label>
           <input
+            id="guess-input"
             type="text"
             value={input}
             onChange={e => setInput(e.target.value)}
-            aria-label="Type your guess"
             placeholder="Type your guess..."
             className="flex-1 px-3 py-2 border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring"
           />
@@ -125,7 +134,7 @@ export default function ChatPanel() {
             whileTap={buttonTap}
             type="submit"
             aria-label="Send guess"
-            className="w-9 h-9 gradient-primary flex items-center justify-center text-primary-foreground hover:opacity-90 transition-opacity"
+            className="w-9 h-9 gradient-primary flex items-center justify-center text-primary-foreground hover:opacity-90 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
             <Send size={16} aria-hidden="true" />
           </motion.button>

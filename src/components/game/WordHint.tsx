@@ -35,7 +35,7 @@ export default function WordHint() {
     // Server format: "_ _ r _ _   _ _ _" (each char/underscore separated by space, double space = word gap)
     const segments = wordHint.split("  "); // split on double space for word boundaries
     return (
-      <div className="flex items-center justify-center gap-0.5 sm:gap-1 flex-wrap" role="status" aria-label={`Word hint: ${wordHint}`}>
+      <div className="flex items-center justify-center gap-0.5 sm:gap-1 flex-wrap" role="status" aria-label={`Word hint: ${wordHint}. Underscores are unrevealed letters.`}>
         {segments.map((segment, si) => (
           <span key={si} className="contents">
             {si > 0 && <span className="w-2 sm:w-3" aria-hidden="true" />}
@@ -81,7 +81,7 @@ export default function WordHint() {
   const hintText = word.split("").map((char, i) => char === " " ? " " : revealedPositions.has(i) ? char : "_").join("");
 
   return (
-    <div className="flex items-center justify-center gap-0.5 sm:gap-1 flex-wrap" role="status" aria-label={`Word hint: ${hintText}`}>
+    <div className="flex items-center justify-center gap-0.5 sm:gap-1 flex-wrap" role="status" aria-label={`Word hint: ${hintText}. Underscores are unrevealed letters.`}>
       {word.split("").map((char, i) => {
         if (char === " ") {
           return <span key={i} className="w-2 sm:w-3" aria-hidden="true" />;

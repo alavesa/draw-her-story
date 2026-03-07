@@ -37,11 +37,12 @@ export default function LobbyScreen() {
         transition={{ duration: 0.5 }}
         className="relative z-10 w-full max-w-md"
       >
+        <h1 className="sr-only">Game Lobby — Room {mp.roomCode}</h1>
         <button
           onClick={() => mp.leaveRoom()}
-          className="text-sm text-muted-foreground hover:text-foreground font-body flex items-center gap-1 mb-4"
+          className="text-sm text-muted-foreground hover:text-foreground font-body flex items-center gap-1 mb-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         >
-          <ArrowLeft size={14} /> Leave Room
+          <ArrowLeft size={14} aria-hidden="true" /> Leave Room
         </button>
 
         {/* Room code card */}
@@ -59,7 +60,7 @@ export default function LobbyScreen() {
               whileTap={buttonTap}
               onClick={handleCopyCode}
               aria-label="Copy room code"
-              className="w-10 h-10 border border-border bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors"
+              className="w-10 h-10 border border-border bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
               <Copy size={16} />
             </motion.button>
@@ -103,7 +104,7 @@ export default function LobbyScreen() {
             ))}
           </div>
           {players.length < 2 && (
-            <p className="text-xs text-muted-foreground font-body mt-3 text-center">
+            <p role="status" aria-live="polite" className="text-xs text-muted-foreground font-body mt-3 text-center">
               Waiting for at least 1 more player...
             </p>
           )}
@@ -116,13 +117,14 @@ export default function LobbyScreen() {
             whileTap={canStart ? buttonTap : {}}
             onClick={handleStart}
             disabled={!canStart}
-            className="w-full gradient-primary text-primary-foreground font-body font-bold py-3.5 hover:opacity-90 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2 shadow-elevated text-lg"
+            aria-disabled={!canStart}
+            className="w-full gradient-primary text-primary-foreground font-body font-bold py-3.5 hover:opacity-90 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2 shadow-elevated text-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
-            <Play size={20} />
+            <Play size={20} aria-hidden="true" />
             Start Game
           </motion.button>
         ) : (
-          <div className="text-center py-3.5 bg-card border border-border text-muted-foreground font-body font-medium">
+          <div role="status" aria-live="polite" className="text-center py-3.5 bg-card border border-border text-muted-foreground font-body font-medium">
             Waiting for host to start...
           </div>
         )}
