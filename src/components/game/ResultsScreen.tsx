@@ -28,7 +28,7 @@ export default function ResultsScreen() {
   const handleShare = async () => {
     const womenNames = discoveredWomen.map(w => w.woman).join(", ");
     const scoreLines = sorted.map(p => `${p.name}: ${p.score} pts`).join(", ");
-    const text = `We played Draw Her Story for #IWD! 🎨🟣 ${scoreLines}. We celebrated ${womenNames}!`;
+    const text = `We played Draw Her Story for #IWD! 🎨🟣 ${scoreLines}. We celebrated ${womenNames}! Play it too: https://drawherstory.win/`;
     try {
       await navigator.clipboard.writeText(text);
       toast.success("Copied to clipboard!");
