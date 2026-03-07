@@ -294,17 +294,17 @@ export default function LandingPage() {
       </motion.div>
 
       <footer className="relative z-10 mt-8 text-center space-y-1">
-        <p className="text-xs text-muted-foreground/60 font-body">
-          Built by <a href="https://www.neversay.no/" target="_blank" rel="noopener noreferrer" className="underline hover:text-muted-foreground transition-colors">Piia</a> with{" "}
-          <a href="https://lovable.dev" target="_blank" rel="noopener noreferrer" className="underline hover:text-muted-foreground transition-colors">Lovable</a>
+        <p className="text-xs text-muted-foreground font-body">
+          Built by <a href="https://www.neversay.no/" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">Piia</a> with{" "}
+          <a href="https://lovable.dev" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">Lovable</a>
           {" "}&{" "}
-          <a href="https://claude.ai" target="_blank" rel="noopener noreferrer" className="underline hover:text-muted-foreground transition-colors">Claude</a>
+          <a href="https://claude.ai" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">Claude</a>
           {" · "}
-          <a href="https://github.com/alavesa/draw-her-story" target="_blank" rel="noopener noreferrer" className="underline hover:text-muted-foreground transition-colors">Source</a>
+          <a href="https://github.com/alavesa/draw-her-story" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">Source</a>
         </p>
-        <p className="text-xs text-muted-foreground/60 font-body">
+        <p className="text-xs text-muted-foreground font-body">
           Made for the{" "}
-          <a href="https://shebuilds.lovable.app/" target="_blank" rel="noopener noreferrer" className="underline hover:text-muted-foreground transition-colors">She Builds</a>
+          <a href="https://shebuilds.lovable.app/" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">She Builds</a>
           {" "}hackathon
         </p>
       </footer>

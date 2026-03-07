@@ -182,7 +182,6 @@ export default function GameScreen() {
             animate="animate"
             exit="exit"
             className="min-h-screen bg-background"
-            role="main"
             aria-label="Game screen"
           >
             <h1 className="sr-only">Drawing round {state.roundIndex + 1} — {artist?.name} is drawing</h1>

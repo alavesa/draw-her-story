@@ -38,7 +38,7 @@ export default function ChatPanel() {
         setLastFeedback("Close guess! Try again.");
       } else if (newMsgs.some(m => m.type === "correct")) {
         setLastFeedback("Correct!");
-      } else if (newMsgs.some(m => m.type === "wrong")) {
+      } else {
         setLastFeedback("Wrong guess. Keep trying!");
       }
     }
