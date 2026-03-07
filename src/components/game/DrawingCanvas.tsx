@@ -279,9 +279,10 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle, Props>(({ disabled = false
               <button
                 key={s}
                 type="button"
+                role="radio"
                 onClick={() => setSize(s)}
                 aria-label={`${SIZE_NAMES[i]} brush`}
-                aria-pressed={size === s}
+                aria-checked={size === s}
                 className={`w-8 h-8 sm:w-9 sm:h-9 border flex items-center justify-center transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${size === s ? "bg-primary border-primary" : "bg-card border-border hover:bg-secondary"}`}
               >
                 <div

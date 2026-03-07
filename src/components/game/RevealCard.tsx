@@ -18,7 +18,7 @@ export default function RevealCard() {
   const isLastRound = state.currentArtistIndex >= state.players.length - 1;
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-background" role="main">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-background">
       <h1 className="sr-only">Did You Know? {woman}</h1>
       <motion.div
         initial={{ scale: 0.8, opacity: 0, y: 30 }}
