@@ -264,9 +264,10 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle, Props>(({ disabled = false
               <button
                 key={c}
                 type="button"
+                role="radio"
                 onClick={() => { setColor(c); setIsEraser(false); }}
                 aria-label={`${COLOR_NAMES[i]} color`}
-                aria-pressed={color === c && !isEraser}
+                aria-checked={color === c && !isEraser}
                 className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full border-2 transition-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${color === c && !isEraser ? "scale-125 border-foreground ring-2 ring-foreground/30" : "border-transparent hover:scale-110"}`}
                 style={{ backgroundColor: c }}
               />
